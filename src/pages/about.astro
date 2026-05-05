@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '@/components/astro/PageHeader.astro';
+
+const disciplines = [
+  { label: 'RTL Design',      detail: 'SystemVerilog, Verilog, formal verification' },
+  { label: 'Verification',    detail: 'UVM, constrained-random, SVA, coverage closure' },
+  { label: 'Physical design', detail: 'Synopsys DC / ICC2, STA, floorplanning' },
+  { label: 'FPGA',            detail: 'Vivado, UltraScale+, Verilator, GTKWave' },
+  { label: 'ML acceleration', detail: 'Systolic arrays, dataflow analysis, INT8 inference' },
+  { label: 'Software',        detail: 'C, Python, scripting around verification flows' },
+];
+---
+
+<BaseLayout
+  title="About — Ratish Gupta"
+  description="Computer Engineering at McMaster University. Digital VLSI, ASIC design, and ML hardware acceleration."
+>
+  <PageHeader eyebrow="04 / About" title="Ratish Gupta" />
+
+  <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 grid md:grid-cols-2 gap-12 border-t border-white/[0.06] pt-12">
+    <div class="space-y-6">
+      <p class="font-sans text-base md:text-lg text-foreground/80 leading-relaxed">
+        I'm a Computer Engineering student at McMaster University focused on
+        digital VLSI and ASIC design. My interest is in the architecture and
+        verification of hardware that runs machine-learning workloads —
+        specifically the design discipline that takes a research idea from
+        algorithm to silicon without losing the property the research depended on.
+      </p>
+      <p class="font-sans text-base text-foreground/70 leading-relaxed">
+        I work in SystemVerilog and UVM, with hands-on experience in synthesis,
+        place-and-route, and FPGA prototyping. I'm currently exploring graduate
+        research in ML-accelerator microarchitecture and the verification
+        methodology that scales with it.
+      </p>
+      <div class="flex items-center gap-4 pt-4">
+        <a
+          href="/resume.pdf"
+          class="font-mono text-[10px] tracking-[0.25em] uppercase border border-white/15 px-6 py-3 text-primary hover:border-white/40 transition-colors"
+        >
+          Download resume ↓
+        </a>
+        <a
+          href="/contact"
+          class="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground hover:text-primary transition-colors"
+        >
+          Get in touch →
+        </a>
+      </div>
+    </div>
+
+    <div class="border border-white/[0.06] aspect-[4/5] flex items-center justify-center">
+      <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+        Portrait — placeholder
+      </span>
+    </div>
+  </section>
+
+  <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-32 border-t border-white/[0.06] pt-12">
+    <p class="font-mono text-[10px] tracking-[0.4em] uppercase text-muted-foreground mb-8">
+      Disciplines
+    </p>
+    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+      {disciplines.map((d) => (
+        <div class="flex justify-between items-baseline border-b border-white/[0.06] pb-4 gap-6">
+          <dt class="font-serif text-xl text-primary">{d.label}</dt>
+          <dd class="font-sans text-sm text-foreground/65 text-right">{d.detail}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+</BaseLayout>

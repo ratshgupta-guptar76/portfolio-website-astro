@@ -1,0 +1,19 @@
+---
+title: "Verifying MOESI Coherence with Formal: Lessons from a Research Core"
+date: 2024-11-18
+tags:
+  - formal
+  - coherence
+  - moesi
+lede: Constrained-random will not catch coherence bugs. Formal will, if you write the invariants right.
+---
+
+MOESI has 34 transitions across 5 states and 4 cores. The state space is too large
+for random simulation to give you any confidence. Formal property checking is not
+optional.
+
+## Invariants, not properties
+
+The temptation is to write SVA properties for every transition. Don't. Write the
+four global invariants: single-writer, no-stale-shared, no-deadlock,
+forward-progress. Properties follow.

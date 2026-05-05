@@ -1,0 +1,38 @@
+---
+title: RTL Architecture Patterns for Efficient Systolic Arrays
+date: 2025-09-14
+tags:
+  - rtl
+  - architecture
+  - ml
+lede: Three patterns that decide whether your systolic array hits its target frequency.
+---
+
+A systolic array's frequency is set in the inner loop of the PE. Everything else —
+DMA, banking, control — exists to keep that loop fed. The three patterns below are
+what separate a clean 800 MHz tape-out from a 600 MHz one held together with
+retiming.
+
+## 1. Register the multiply, not the accumulate
+
+If you register the accumulator output, you have added a critical path through the
+adder you will never be able to retime away. Register between multiply and add — the
+synthesizer can balance the rest.
+
+The rough rule of thumb is that a $W \times W$ multiplier dominates timing for
+$W \geq 8$, so the budget split is
+
+$$
+T_{\text{cycle}} \approx T_{\text{mul}}(W) + T_{\text{add}}(W) + T_{\text{setup}}.
+$$
+
+## 2. Make weight load a side channel
+
+Weight load is rare relative to compute. Treat it like a configuration interface,
+not part of the datapath. A separate single-cycle write port keeps the PE's compute
+path uncluttered.
+
+## 3. Bank by skew, not by index
+
+Activation banks should be sized to absorb the systolic skew across rows. Sizing by
+index — *"one bank per row"* — wastes area on the boundary rows that drain first.

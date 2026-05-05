@@ -1,0 +1,43 @@
+---
+title: "Demystifying UVM: A Pragmatic Approach to Functional Coverage"
+date: 2025-10-22
+updated: 2025-10-28
+tags:
+  - uvm
+  - verification
+  - coverage
+lede: Coverage closure is where most UVM environments stall. The fix is rarely more covergroups — it is fewer, sharper ones.
+references:
+  - "Spear, C. & Tumbush, G. SystemVerilog for Verification, 3rd ed., Springer, 2012."
+  - "Accellera. Universal Verification Methodology Reference Manual, v1.2, 2014."
+---
+
+When a coverage report stops climbing past 87%, the instinct is to add bins. The
+instinct is wrong. A covergroup that does not point at a behavior the design exhibits
+is dead weight: it inflates the model, slows regression, and hides the holes that
+actually matter.
+
+## Coverage describes intent, not state
+
+A covergroup is a hypothesis: *"if these ranges and crosses are exercised, the block
+is well-tested."* If you cannot defend the hypothesis in one sentence, the covergroup
+is noise.
+
+```system-verilog
+covergroup cg_axi_burst @(posedge vif.clk iff vif.valid);
+  cp_len   : coverpoint vif.len   { bins small = {[1:7]}; bins long = {[8:255]}; }
+  cp_size  : coverpoint vif.size  { bins b8  = {3}; bins b16 = {4}; bins b32 = {5}; }
+  cp_align : coverpoint vif.align { bins ok = {1}; bins bad = {0}; }
+  cx_len_size : cross cp_len, cp_size;
+endgroup
+```
+
+Three coverpoints, one cross. That is the entire interesting space of an AXI4 burst
+from the protocol's perspective. Anything else belongs in an assertion, not a
+covergroup.
+
+## Treat 100% as a smell
+
+Hitting 100% in a week is suspicious. Either the model is too coarse, or the
+regression is hitting trivial bins. The signal is the slope of the curve in the last
+5%, not the number on the dashboard.

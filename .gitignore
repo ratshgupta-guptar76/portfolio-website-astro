@@ -1,0 +1,31 @@
+.DS_Store
+.idea/
+.vscode/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Astro
+.astro/
+dist/
+.vercel/
+.netlify/
+
+# Vite
+*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*
+
+# Mac and Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini

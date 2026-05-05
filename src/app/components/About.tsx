@@ -1,0 +1,88 @@
+import { motion } from "motion/react";
+import { Section } from "./ui/Section";
+
+const DISCIPLINES = [
+  { label: "RTL Design", detail: "SystemVerilog / Verilog" },
+  { label: "Architecture", detail: "RISC-V / Accelerators" },
+  { label: "Verification", detail: "UVM / Formal" },
+  { label: "Implementation", detail: "FPGA / ASIC Tapeout" },
+];
+
+export function About() {
+  return (
+    <Section id="about" className="bg-background">
+      <div className="w-full flex flex-col lg:flex-row gap-16 lg:gap-24">
+        {/* Left — Image */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1 }}
+          className="w-full lg:w-[45%] shrink-0"
+        >
+          <div className="aspect-[3/4] relative border border-white/[0.06] overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1649649089599-59782dff8d04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaWxpY29uJTIwY2hpcCUyMG1hY3JvfGVufDF8fHx8MTc3MjkwNTU1MHww&ixlib=rb-4.1.0&q=80&w=800"
+              alt="Silicon architecture macro"
+              className="w-full h-full object-cover opacity-50 grayscale"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+
+            {/* Caption overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#706d65]">
+                Fig. 01 — Die photograph, custom accelerator
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Right — Text */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.15 }}
+          className="w-full lg:w-[55%] flex flex-col justify-center"
+        >
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-8 block">
+            00 / About
+          </span>
+
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-primary leading-[1.2] tracking-tight mb-8">
+            Bridging conceptual architecture
+            <br className="hidden md:block" />
+            and physical silicon.
+          </h2>
+
+          <div className="font-sans text-[15px] text-muted-foreground leading-[1.8] space-y-5 max-w-lg">
+            <p>
+              I specialize in the low-level implementation of digital systems —
+              high-performance accelerators, pipelined processor cores, and the
+              verification infrastructure required to ship them with confidence.
+            </p>
+            <p>
+              My work spans computer architecture exploration, RTL design at
+              advanced process nodes, and the disciplined methodology that turns
+              architectural intent into timing-closed, fabrication-ready silicon.
+            </p>
+          </div>
+
+          {/* Discipline Grid */}
+          <div className="mt-14 grid grid-cols-2 gap-x-12 gap-y-6">
+            {DISCIPLINES.map((d, i) => (
+              <div key={i} className="flex flex-col gap-1">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+                  {d.label}
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#706d65]">
+                  {d.detail}
+                </span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </Section>
+  );
+}

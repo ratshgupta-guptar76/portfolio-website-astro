@@ -1,0 +1,27 @@
+---
+import { Navbar } from '@/app/components/Navbar';
+import Footer from '@/components/astro/Footer.astro';
+import '../styles/index.css';
+
+const {
+  title = 'Ratish Gupta',
+  description = 'Hardware design and verification portfolio',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary">
+    <Navbar client:load currentPath={Astro.url.pathname} />
+    <main class="relative min-h-screen pt-16">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,13 @@
+---
+title: "FPGA Debug Without ChipScope: A Minimal Logic Analyzer"
+date: 2024-05-22
+tags:
+  - fpga
+  - debug
+  - verilog
+lede: Sometimes the right tool is the one you build into your own design.
+---
+
+Vendor debug IP is heavy, slow to instantiate, and hides the timing impact of the
+probes. A 200-line circular-buffer capture engine fits in 1.8K LUTs and gives you
+cycle-accurate visibility.

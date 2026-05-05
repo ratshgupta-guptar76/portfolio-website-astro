@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { PageHeader } from '../../app/components/ui/PageHeader';
+
+const allProjects = (await getCollection('projects')) as CollectionEntry<'projects'>[];
+const projects = allProjects
+  .filter((project) => !project.data.draft)
+  .sort((a: CollectionEntry<'projects'>, b: CollectionEntry<'projects'>) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const cardVariants = ['lithography'] as const;
+---
+
+<BaseLayout title="Projects | Ratish Gupta" description="Selected hardware projects and tapeout work.">
+  <PageHeader client:load kicker="Index · Projects" title="Selected Work" lede="A focused archive of RTL, verification, and accelerator design projects." back={{ to: '/', label: 'Back to Home' }} />
+
+  <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 md:pb-40">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {projects.map((project, index) => (
+        <a href={`/projects/${project.id}`} class={`project-card project-card--${cardVariants[index % cardVariants.length]} group border border-white/[0.08] bg-white/[0.015] hover:bg-white/[0.03] transition-colors duration-500 p-6 md:p-8 block`}>
+          <div class="flex items-center justify-between gap-4 mb-5">
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#706d65]">{project.data.category}</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#706d65]">{project.data.status}</span>
+          </div>
+          <h2 class="font-serif text-[28px] md:text-[34px] text-[#ebe6dd] leading-[1.05] tracking-[-0.02em] mb-4 group-hover:text-white transition-colors">{project.data.title}</h2>
+          <p class="font-serif text-[16px] text-[#a8a39a] leading-[1.75] mb-6">{project.data.summary}</p>
+          <div class="flex flex-wrap gap-2">
+            {project.data.tags.map((tag: string) => <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#706d65] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>)}
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <style>
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition: border-color 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+    }
+
+    .project-card:hover {
+      border-color: rgba(235, 230, 221, 0.18);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 14px 36px rgba(0, 0, 0, 0.22);
+    }
+
+    .project-card--lithography {
+      --sheen-angle: 124deg;
+      --grid-size: 18px;
+      --hover-opacity: 0.32;
+      --sheen-saturate: 1.05;
+      --sheen-contrast: 1.03;
+      --sheen-main-start: rgba(255, 255, 255, 0.004);
+      --sheen-main-mid: rgba(120, 160, 255, 0.03);
+      --sheen-main-core: rgba(210, 226, 255, 0.05);
+      --sheen-main-end: rgba(160, 238, 255, 0.032);
+      --specular: rgba(180, 220, 255, 0.06);
+      --grid-line: rgba(120, 190, 255, 0.02);
+      --glow: rgba(170, 210, 255, 0.03);
+      --edge-tint: rgba(120, 200, 255, 0.04);
+      --prism-layer: linear-gradient(
+        94deg,
+        rgba(60, 200, 255, 0.07) 0%,
+        rgba(120, 170, 255, 0.06) 12%,
+        rgba(170, 120, 255, 0.065) 24%,
+        rgba(235, 140, 210, 0.055) 36%,
+        rgba(255, 200, 120, 0.05) 48%,
+        rgba(160, 255, 200, 0.055) 60%,
+        rgba(120, 220, 255, 0.06) 72%,
+        rgba(160, 140, 255, 0.055) 84%,
+        rgba(255, 180, 120, 0.05) 92%,
+        rgba(60, 200, 255, 0.07) 100%
+      );
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      background:
+        var(--prism-layer, linear-gradient(90deg, transparent, transparent)),
+        linear-gradient(
+          var(--sheen-angle, 118deg),
+          var(--sheen-main-start, rgba(255, 255, 255, 0.004)) 0%,
+          rgba(255, 255, 255, 0.014) 20%,
+          var(--sheen-main-mid, rgba(175, 196, 255, 0.038)) 38%,
+          var(--sheen-main-core, rgba(238, 244, 255, 0.065)) 49%,
+          var(--sheen-main-end, rgba(182, 241, 234, 0.032)) 60%,
+          rgba(255, 255, 255, 0.006) 100%
+        ),
+        repeating-linear-gradient(
+          90deg,
+          var(--grid-line, rgba(255, 255, 255, 0.014)) 0 1px,
+          transparent 1px var(--grid-size, 26px)
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.01) 0 1px,
+          transparent 1px var(--grid-size, 26px)
+        ),
+        radial-gradient(circle at 16% 18%, var(--specular, rgba(255, 255, 255, 0.035)), transparent 24%),
+        radial-gradient(circle at 84% 78%, rgba(255, 255, 255, 0.022), transparent 22%);
+      background-size: 260% 100%, 180% 180%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      background-position: 120% 50%, 88% 52%, 0 0, 0 0, 0 0, 0 0;
+      opacity: 0;
+      transform: translateX(0) skewX(-5deg);
+      transition:
+        opacity 280ms ease,
+        transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
+        background-position 900ms ease;
+      mix-blend-mode: screen;
+      filter: saturate(var(--sheen-saturate, 0.8)) contrast(var(--sheen-contrast, 1.02));
+      z-index: 0;
+    }
+
+    .project-card:hover::before {
+      opacity: var(--hover-opacity, 0.42);
+      transform: translateX(0) skewX(-3deg);
+      background-position: 120% 50%, 88% 52%, 0 0, 0 0, 0 0, 0 0;
+      animation: prism-shift 14s linear infinite;
+    }
+
+    .project-card::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      background:
+        linear-gradient(104deg, transparent 36%, var(--edge-tint, rgba(255, 255, 255, 0.032)) 48%, transparent 60%),
+        radial-gradient(circle at 50% 50%, var(--glow, rgba(206, 224, 255, 0.03)), transparent 44%);
+      opacity: 0;
+      transform: translateX(0) rotate(-4deg);
+      transition: opacity 300ms ease, transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+      mix-blend-mode: screen;
+      filter: blur(0.45px);
+      z-index: 0;
+    }
+
+    .project-card:hover::after {
+      opacity: 0.28;
+      transform: translateX(0) rotate(-2deg);
+      animation: specular-drift 16s linear infinite;
+    }
+
+    @keyframes prism-shift {
+      0% {
+        background-position: 120% 50%, 88% 52%, 0 0, 0 0, 0 0, 0 0;
+      }
+      100% {
+        background-position: -120% 50%, 88% 52%, 0 0, 0 0, 0 0, 0 0;
+      }
+    }
+
+    @keyframes specular-drift {
+      0% {
+        opacity: 0.18;
+      }
+      100% {
+        opacity: 0.28;
+      }
+    }
+
+    .project-card > * {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</BaseLayout>
