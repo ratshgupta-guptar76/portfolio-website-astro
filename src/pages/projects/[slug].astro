@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { PageHeader } from '@/app/components/ui/PageHeader';
+import { PageHeader } from '../../app/components/ui/PageHeader';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -141,13 +141,26 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
   }
   .prose-body figure {
     margin: 0.5rem 0 2rem;
+    display: grid;
+    justify-items: center;
+  }
+  .prose-body figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    background: transparent;
+    padding: 0;
   }
   .prose-body figcaption {
+    margin-top: 0.75rem;
     text-align: center;
     font-family: var(--font-sans);
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    color: #706d65;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: #a8a39a;
+    line-height: 1.6;
   }
   .prose-body blockquote {
     margin: 1.75rem 0;
@@ -155,6 +168,42 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
     border-left: 1px solid rgba(255, 255, 255, 0.15);
     color: #a8a39a;
     font-style: italic;
+  }
+  .prose-body table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.2);
+    margin: 1.75rem 0;
+  }
+  .prose-body thead th {
+    text-align: left;
+    font-weight: 500;
+    padding: 0.75rem 0.9rem;
+    color: #706d65;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .prose-body tbody td {
+    padding: 0.75rem 0.9rem;
+    color: #cfc9bf;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    vertical-align: top;
+  }
+  .prose-body tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .prose-body tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .prose-body table td:last-child,
+  .prose-body table th:last-child {
+    text-align: right;
   }
   .prose-body em { color: #ebe6dd; opacity: 0.9; }
   .prose-body strong { color: #ebe6dd; font-weight: 500; }

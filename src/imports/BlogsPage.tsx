@@ -1,6 +1,6 @@
 import svgPaths from "./svg-wdg7zg3wiw";
-import imgFrameMedium from "figma:asset/05147e92268842d49ae0c93c0b28b51ac1a616ba.png";
-import imgFrameBlogger from "./`asset/592307c7cc171309dd79d80a977e0531a335162d.png";
+import imgFrameMedium from "./asset/05147e92268842d49ae0c93c0b28b51ac1a616ba.png";
+import imgFrameBlogger from "./asset/592307c7cc171309dd79d80a977e0531a335162d.png";
 
 function FrameMedium() {
   return (

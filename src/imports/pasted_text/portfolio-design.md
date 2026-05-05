@@ -124,7 +124,7 @@ PAGES TO DESIGN
 8. Contact page (/contact/)
    - "Contact" kicker, "Get in touch" H1.
    - Contact methods as a definition list with mono labels: Email,
-     GitHub, LinkedIn, Scholar, CV. Two-column grid on desktop,
+     GitHub, LinkedIn, Medium, CV. Two-column grid on desktop,
      stacked on mobile. Email address obfuscated as
      "you [at] example [dot] com". One closing paragraph noting
      current availability.

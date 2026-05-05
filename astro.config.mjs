@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import remarkMath from 'remark-math';
+import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import path from 'node:path';
 
@@ -24,7 +25,7 @@ export default defineConfig({
   output: 'static',
   integrations: [
     react(),
-    mdx({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex] }),
+    mdx({ remarkPlugins: [remarkMath, remarkGfm], rehypePlugins: [rehypeKatex] }),
     sitemap(),
   ],
   vite: {
@@ -36,6 +37,7 @@ export default defineConfig({
     },
   },
   markdown: {
+    remarkPlugins: [remarkMath, remarkGfm],
     shikiConfig: { theme: 'github-dark-dimmed', wrap: true },
   },
 });

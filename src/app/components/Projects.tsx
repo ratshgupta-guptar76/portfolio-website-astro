@@ -6,14 +6,14 @@ import { useRef } from "react";
 const PROJECTS = [
   {
     id: "01",
-    slug: "systolic-array-accelerator",
-    title: "Systolic Array Accelerator",
-    category: "Architecture / ASIC",
+    slug: "int8-systolic-mac-array",
+    title: "INT8 Systolic MAC Array",
+    category: "Architecture / FPGA",
     description:
-      "High-performance matrix multiplication engine implemented in SystemVerilog. Designed for edge ML inference with configurable data paths and aggressive timing closure at 7nm.",
+      "High-performance matrix multiplication engine implemented in SystemVerilog. Designed for edge ML inference with configurable data paths and aggressive timing closure.",
     image:
       "https://images.unsplash.com/photo-1768527858342-037cff722276?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMGdyaWQlMjBkYXJrfGVufDF8fHx8MTc3MjkwNTU1MXww&ixlib=rb-4.1.0&q=80&w=1080",
-    tags: ["SystemVerilog", "ASIC", "Synthesis"],
+    tags: ["SystemVerilog", "FPGA", "Synthesis"],
   },
   {
     id: "02",

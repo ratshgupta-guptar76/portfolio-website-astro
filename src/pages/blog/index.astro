@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { PageHeader } from '@/app/components/ui/PageHeader';
+import { PageHeader } from '../../app/components/ui/PageHeader';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
