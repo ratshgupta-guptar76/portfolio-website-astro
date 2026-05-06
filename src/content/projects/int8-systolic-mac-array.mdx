@@ -60,7 +60,7 @@ The design has three pieces that I'll describe in order: a skew unit that stagge
 
 <figure>
   <img
-    src="/src/assets/imgs/int8-systolic-mac-array/Architecture-Diagram.png"
+    src="/imgs/int8-systolic-mac-array/architecture-diagram.png"
     alt="Architecture diagram of the INT8 systolic MAC array"
     loading="lazy"
   />
@@ -187,7 +187,7 @@ If I needed to push past 200 MHz, the path forward is the DSP48E1's internal pip
 Before getting into the testbench structure, here's what a single matmul actually looks like running in simulation.
 
 <figure>
-  <img src="/src/assets/imgs/int8-systolic-mac-array/waveform.png"
+  <img src="/imgs/int8-systolic-mac-array/waveform.png"
        alt="Simulation waveform of a 4x4 matrix multiplication showing skew unit emission and accumulator updates" />
   <figcaption>Fig. 3 — A 4×4 matmul in simulation. The done signal pulses at cycle 22, matching the K + ROWS + COLS − 2 latency formula.</figcaption>
 </figure>
