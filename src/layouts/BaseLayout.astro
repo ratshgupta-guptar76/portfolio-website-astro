@@ -16,8 +16,115 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
+
+    {/*
+      First-load preloader. Hidden by default via CSS so internal navigations
+      between already-visited pages never see it. The inline script below
+      checks sessionStorage and only reveals it on a fresh session.
+    */}
+    <style>
+      #site-preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #050506;
+        font-family: 'Space Mono', monospace;
+        transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+      }
+      #site-preloader.active {
+        display: flex;
+      }
+      #site-preloader.exiting {
+        transform: translateY(-100%);
+      }
+      #site-preloader .label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.4em;
+        color: #706d65;
+        margin-bottom: 2.5rem;
+      }
+      #site-preloader .count {
+        font-size: clamp(4.5rem, 14vw, 10rem);
+        font-weight: 300;
+        color: #ebe6dd;
+        line-height: 1;
+        letter-spacing: -0.05em;
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 2.5rem;
+      }
+      #site-preloader .track {
+        width: 10rem;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.06);
+        position: relative;
+        overflow: hidden;
+      }
+      #site-preloader .fill {
+        position: absolute;
+        inset-block: 0;
+        left: 0;
+        width: 0%;
+        background: rgba(255, 255, 255, 0.3);
+      }
+      /* Lock body scroll while the preloader is up */
+      html.preloading,
+      html.preloading body {
+        overflow: hidden;
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary">
+    <div id="site-preloader" aria-hidden="true">
+      <span class="label">Initializing</span>
+      <div class="count">000</div>
+      <div class="track"><div class="fill"></div></div>
+    </div>
+
+    <script is:inline>
+      (function () {
+        if (sessionStorage.getItem("site-preloader-shown") === "1") return;
+
+        var el = document.getElementById("site-preloader");
+        if (!el) return;
+        var countEl = el.querySelector(".count");
+        var fillEl = el.querySelector(".fill");
+
+        document.documentElement.classList.add("preloading");
+        el.classList.add("active");
+
+        var duration = 2200;
+        var start = performance.now();
+
+        function tick(now) {
+          var t = Math.min(1, (now - start) / duration);
+          // Ease-out cubic — same curve as the original React loader
+          var eased = 1 - Math.pow(1 - t, 3);
+          var pct = Math.floor(eased * 100);
+          countEl.textContent = String(pct).padStart(3, "0");
+          fillEl.style.width = pct + "%";
+
+          if (t < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            setTimeout(function () {
+              el.classList.add("exiting");
+              setTimeout(function () {
+                el.remove();
+                document.documentElement.classList.remove("preloading");
+                sessionStorage.setItem("site-preloader-shown", "1");
+              }, 900);
+            }, 500);
+          }
+        }
+        requestAnimationFrame(tick);
+      })();
+    </script>
+
     <Navbar client:load currentPath={Astro.url.pathname} />
     <main class="relative min-h-screen pt-16">
       <slot />

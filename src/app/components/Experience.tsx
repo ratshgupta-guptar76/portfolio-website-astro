@@ -4,27 +4,27 @@ import { Section, SectionHeader } from "./ui/Section";
 const EXPERIENCE = [
   {
     id: "01",
-    role: "Senior Hardware Engineer",
-    company: "Neural Silicon",
-    period: "2024 — Present",
+    role: "Software Developer Intern",
+    company: "Bank of Montreal (BMO)",
+    period: "May 2025 — Aug 2025",
     description:
-      "Leading RTL architecture exploration for next-generation ML accelerators. Owning front-end design through synthesis and mentoring junior engineers in UVM methodology.",
+      "Backend microservices in a regulated, distributed environment. Built automated test frameworks that lifted regression coverage past 80% and added edge-case validation across distribution services. Performed root-cause debugging across distributed systems, working with cross-functional teams under production deadlines.",
   },
   {
     id: "02",
-    role: "ASIC Design Engineer",
-    company: "Quantum Circuits",
-    period: "2021 — 2024",
+    role: "B.Eng. Computer Engineering",
+    company: "McMaster University",
+    period: "Sept 2023 — Apr 2027",
     description:
-      "Designed and verified high-speed digital blocks for production SoCs. Drove synthesis and timing closure across multiple tapeouts at 5nm process nodes.",
+      "Dean's Honour List (2024), Engineering International Scholar Award, Faculty of Engineering Award of Excellence, Dean's Global Distinction. Coursework: Electronic Devices & Circuits (A), Microprocessor Systems (A), Communication Systems (A+), Signals & Systems (A), Data Structures and Algorithms (A), Control Systems.",
   },
   {
     id: "03",
-    role: "FPGA Engineer",
-    company: "AeroSpace Dynamics",
-    period: "2018 — 2021",
+    role: "Attendee — AI Accelerator & Compute-in-Memory Sessions",
+    company: "IEEE ISSCC 2026, San Francisco, CA",
+    period: "Feb 2026",
     description:
-      "Built custom radar signal processing pipelines on Xilinx UltraScale+ FPGAs. Implemented rigorous HW/SW co-design frameworks in C and Verilog.",
+      "Sessions on SRAM constraints, KV-cache scaling, and TOPS/W vs TOPS/mm² trade-offs. Discussed silicon implementation and system-level design considerations with engineers from Qualcomm, IBM, Samsung, Synopsys, GSMC, and others.",
   },
 ];
 

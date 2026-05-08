@@ -1,0 +1,43 @@
+---
+title: Real-Time Software-Defined Radio System
+summary: Multithreaded FM SDR receiver in C++17 on Raspberry Pi with mono/stereo audio and full RDS metadata decoding, prototyped end-to-end in Python first.
+category: DSP / Embedded
+date: 2026-02-01
+updated: 2026-03-31
+status: Verified
+stack:
+  - C++17
+  - Python
+  - Raspberry Pi
+  - DSP
+  - NumPy
+tags:
+  - DSP
+  - Embedded
+  - Real-Time
+  - SDR
+source: "github.com/ratshgupta-guptar76"
+order: 2
+results:
+  - { label: Pipeline,            value: "3-thread producer-consumer" }
+  - { label: Resampler,           value: "Polyphase rational FIR (arbitrary U/D)" }
+  - { label: Latency improvement, value: "2.7× on embedded convolution" }
+  - { label: RDS chain,           value: "BPF → PLL → IQ demod → CDR → frame sync" }
+  - { label: Target,              value: "Raspberry Pi" }
+---
+
+The brief was to build an FM receiver that runs on a Raspberry Pi in real time, decodes mono and stereo audio, and recovers the RDS metadata stream that broadcast stations interleave with their audio. RDS is the channel that sends station name, song title, and traffic info — useful for the project because it forces the signal-processing chain to be both sample-accurate and well-pipelined.
+
+## Architecture
+
+The receiver runs as three threads in a producer-consumer pipeline: an RF front-end thread that pulls IQ samples, a demodulation thread that produces audio, and an RDS thread that recovers the data stream. Decoupling them with bounded queues was the only way to keep audio glitch-free under variable RDS workload.
+
+The resampler is a polyphase rational FIR with arbitrary `U/D` ratios. The first version used a generic upsample-filter-downsample chain with intermediate buffers; replacing it with a single polyphase commutator eliminated the intermediate allocation and cut convolution latency on the Pi by 2.7×.
+
+## Implementation
+
+I prototyped the full RDS decode chain in Python first — band-pass filter, carrier recovery, PLL, IQ demodulation, root-raised-cosine matched filter, clock-and-data recovery, Manchester decode, differential decode, frame sync — and only then ported it to C++17. Doing it that way meant every block had a NumPy reference I could regression-test the C++ implementation against, instead of debugging signal-processing bugs and translation bugs at the same time.
+
+## Verification
+
+The hardest bug was a CDR alignment failure that only appeared at block boundaries in the streaming pipeline. The Python prototype processed the whole capture in one buffer and never hit it; the C++ version processed in chunks and the symbol-timing recovery would slip every time a new chunk arrived. I caught it by plotting the IQ constellation as the stream advanced — the points would cluster cleanly within a chunk and then smear across the boundary. The fix was to carry the CDR state across chunks rather than re-initialising per buffer.

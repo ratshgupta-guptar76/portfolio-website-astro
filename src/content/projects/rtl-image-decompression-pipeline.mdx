@@ -1,0 +1,47 @@
+---
+title: RTL Image Decompression Pipeline
+summary: Full FPGA image decoder in SystemVerilog on the Altera DE1-SoC at 50 MHz, covering chroma upsampling, YCbCr→RGB conversion, and 2-D inverse DCT.
+category: FPGA / RTL
+date: 2025-10-01
+updated: 2025-11-30
+status: Verified
+stack:
+  - SystemVerilog
+  - Quartus Prime
+  - ModelSim
+  - Altera DE1-SoC
+tags:
+  - FPGA
+  - RTL
+  - Image Processing
+  - DSP
+order: 3
+results:
+  - { label: Target,        value: "Altera DE1-SoC" }
+  - { label: Operating Freq, value: "50 MHz" }
+  - { label: Achieved Fmax,  value: "55 MHz (positive slack)" }
+  - { label: Throughput,     value: "2 pixels per 8 clock cycles" }
+  - { label: Multipliers,    value: "4 hardware-multiplexed" }
+synthesis:
+  - { stage: "Quartus synthesis", frequency: "55 MHz", slack: "Positive", area: "Fits DE1-SoC" }
+---
+
+JPEG decoding is the textbook DCT-based decompression flow, which makes it a good vehicle for a from-scratch RTL exercise — the algorithm is well-specified, but the hardware translation is where the interesting decisions live. The goal was to take an already-entropy-decoded payload and run it through chroma upsampling, the colour-space conversion, and the 2-D inverse DCT, all in synthesisable SystemVerilog targeting the DE1-SoC at 50 MHz.
+
+## Architecture
+
+The pipeline is built around a single 8-state FSM that drives the upsampling and colour-space stages. Rather than spend area on per-stage multipliers, I time-multiplexed four hardware multipliers across the conversion math — the FSM cycles through the coefficient sets so each multiplier is reused four times per pass. The result is two pixels emerging from the pipeline every eight clock cycles, which is enough headroom to keep up with the source stream at 50 MHz without buffering pressure.
+
+## Implementation
+
+The 2-D inverse DCT was the most fixed-point-sensitive stage. The conversion from frequency back to pixel space accumulates rounding error across rows and columns, and the choice of integer width and rounding mode at each multiply directly drives whether the output matches a reference decoder.
+
+## Verification
+
+I worked through three classes of bug, each caught by a different tool:
+
+- **Fixed-point rounding errors** — diagnosed in ModelSim by comparing every intermediate pixel value against a Python reference. The fix was a saturation step before the round-to-nearest at the IDCT output.
+- **A 1-bit address overflow** in the line buffer — a write counter that wrapped exactly one short of the line, corrupting the last pixel of every scanline. Visible only as a one-pixel column artefact in the output image.
+- **Simulation-versus-hardware mismatches** caught by reconciling ModelSim waveforms against Quartus's post-fit timing reports. A combinational path I had assumed was registered turned out to bleed across a clock boundary on the actual fabric.
+
+Critical paths were traced in Quartus's timing analyser; the Fmax of 55 MHz was reached after pipelining one accumulator chain in the colour-space conversion that was eating most of the slack.

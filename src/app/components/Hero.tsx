@@ -4,10 +4,8 @@ import {
   useTransform,
   useMotionValue,
   useSpring,
-  AnimatePresence,
 } from "motion/react";
 import { useRef, useEffect, useCallback, useState } from "react";
-import { Loader } from "./Loader";
 
 // --- Canvas Star Field ---
 function StarField() {
@@ -266,7 +264,6 @@ function LoadingCounter() {
 // --- Main Hero ---
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [showLoader, setShowLoader] = useState(true);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -329,11 +326,6 @@ export function Hero() {
 
   return (
     <>
-      <AnimatePresence>
-        {showLoader && (
-          <Loader onLoadingComplete={() => setShowLoader(false)} />
-        )}
-      </AnimatePresence>
       <section
         ref={containerRef}
         className="relative h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden bg-[#040405]"
