@@ -1,47 +1,110 @@
 ---
 title: RTL Image Decompression Pipeline
-summary: Full FPGA image decoder in SystemVerilog on the Altera DE1-SoC at 50 MHz, covering chroma upsampling, YCbCr→RGB conversion, and 2-D inverse DCT.
+summary: FPGA-based JPEG-style image decoder in SystemVerilog on the Altera DE1-SoC at 50 MHz. Four-multiplier datapath time-multiplexed across upsampling, color-space conversion, and 2-D inverse DCT, with full SRAM, UART, and VGA integration.
 category: FPGA / RTL
 date: 2025-10-01
-updated: 2025-11-30
+updated: 2025-11-24
 status: Verified
 stack:
   - SystemVerilog
   - Quartus Prime
   - ModelSim
-  - Altera DE1-SoC
+  - Altera DE1-SoC (Cyclone V)
+  - VGA / UART / SRAM controllers
 tags:
   - FPGA
   - RTL
-  - Image Processing
   - DSP
+  - Image Processing
+  - FSM
+source: "github.com/3dq5-mcmaster/project-group-13-tuesday"
 order: 3
 results:
-  - { label: Target,        value: "Altera DE1-SoC" }
-  - { label: Operating Freq, value: "50 MHz" }
-  - { label: Achieved Fmax,  value: "55 MHz (positive slack)" }
-  - { label: Throughput,     value: "2 pixels per 8 clock cycles" }
-  - { label: Multipliers,    value: "4 hardware-multiplexed" }
+  - { label: Target,             value: "Altera DE1-SoC (Cyclone V)" }
+  - { label: Operating frequency, value: "50 MHz (project constraint)" }
+  - { label: Multipliers,        value: "4 — hardware-multiplexed across 6 outputs (R/G/B for odd & even pixels)" }
+  - { label: Throughput,         value: "2 pixels per 8 clock cycles" }
+  - { label: Total RTL,          value: "~2,600 lines SystemVerilog across 12 modules" }
+  - { label: Milestones,         value: "M1: upsampling + CSC · M2: SRAM fetch · M3: 2-D IDCT" }
 synthesis:
-  - { stage: "Quartus synthesis", frequency: "55 MHz", slack: "Positive", area: "Fits DE1-SoC" }
+  - { stage: "Quartus Synthesis (M1+M2+M3)", frequency: "≥ 50 MHz", slack: "Positive", area: "Fits on DE1-SoC fabric" }
 ---
 
-JPEG decoding is the textbook DCT-based decompression flow, which makes it a good vehicle for a from-scratch RTL exercise — the algorithm is well-specified, but the hardware translation is where the interesting decisions live. The goal was to take an already-entropy-decoded payload and run it through chroma upsampling, the colour-space conversion, and the 2-D inverse DCT, all in synthesisable SystemVerilog targeting the DE1-SoC at 50 MHz.
+A from-scratch FPGA implementation of a JPEG-style image decoder for the COE 3DQ5 project. The decoder takes a partially-entropy-decoded payload streamed in over UART, runs it through the three classical decompression stages — chroma upsampling, YCbCr → RGB color-space conversion, and 2-D inverse DCT — and writes the resulting RGB frame out over a VGA controller. Everything below the 8-bit pixel level is implemented in SystemVerilog and meets a hard 50 MHz clock constraint with a fixed multiplier budget.
 
-## Architecture
+The build was a group project across three milestones (M1 → M2 → M3); my work centered on the milestone-2 fetch state machine, the milestone-3 IDCT compute path, and the dual-port RAM plumbing that made M3 feasible inside the multiplier budget.
 
-The pipeline is built around a single 8-state FSM that drives the upsampling and colour-space stages. Rather than spend area on per-stage multipliers, I time-multiplexed four hardware multipliers across the conversion math — the FSM cycles through the coefficient sets so each multiplier is reused four times per pass. The result is two pixels emerging from the pipeline every eight clock cycles, which is enough headroom to keep up with the source stream at 50 MHz without buffering pressure.
+## System architecture
 
-## Implementation
+The top-level [`project.sv`](https://github.com/3dq5-mcmaster/project-group-13-tuesday) (≈360 lines) wires together the three stage modules and the I/O controllers:
 
-The 2-D inverse DCT was the most fixed-point-sensitive stage. The conversion from frequency back to pixel space accumulates rounding error across rows and columns, and the choice of integer width and rounding mode at each multiply directly drives whether the output matches a reference decoder.
+```
+UART_receive_controller ─▶ UART_SRAM_interface ─▶ external SRAM
+                                                       │
+              ┌────────────────────────────────────────┤
+              ▼                                        ▼
+   m3_read (2-D IDCT, 446 lines)         m2_fetch (read DCT blocks, 174 lines)
+              │                                        │
+              └──────────► milestone1 (upsample + CSC, 745 lines) ──► VGA_SRAM_interface ─▶ VGA controller
+```
 
-## Verification
+The full design is **~2,600 lines of SystemVerilog across 12 modules**, including the SRAM controller, UART receive pipe, VGA framebuffer reader, push-button debouncer, and the seven-segment display driver. The compute work lives in three modules:
 
-I worked through three classes of bug, each caught by a different tool:
+- **`milestone1.sv`** — chroma upsampling (10-bit shift registers per chroma channel) + the 4-multiplier color-space converter. ~745 lines.
+- **`m2_fetch.sv`** — fetch DCT blocks from SRAM and stream coefficients into the IDCT compute engine.
+- **`m3_read.sv`** — the 2-D IDCT itself, separable as Compute_T (column transform) → transpose → Compute_S (row transform), plus the dual-port RAMs that hold the intermediate matrix.
 
-- **Fixed-point rounding errors** — diagnosed in ModelSim by comparing every intermediate pixel value against a Python reference. The fix was a saturation step before the round-to-nearest at the IDCT output.
-- **A 1-bit address overflow** in the line buffer — a write counter that wrapped exactly one short of the line, corrupting the last pixel of every scanline. Visible only as a one-pixel column artefact in the output image.
-- **Simulation-versus-hardware mismatches** caught by reconciling ModelSim waveforms against Quartus's post-fit timing reports. A combinational path I had assumed was registered turned out to bleed across a clock boundary on the actual fabric.
+## Milestone 1 — upsampling and color-space conversion
 
-Critical paths were traced in Quartus's timing analyser; the Fmax of 55 MHz was reached after pipelining one accumulator chain in the colour-space conversion that was eating most of the slack.
+Chroma in 4:2:0 is half-rate in both axes, so the U and V channels are upsampled with 10-tap shift registers before color-space conversion. The CSC math is the standard ITU-R BT.601 reverse mapping:
+
+$$
+\begin{aligned}
+R &= Y + 1.402 \,(V' - 128) \\
+G &= Y - 0.344 \,(U' - 128) - 0.714 \,(V' - 128) \\
+B &= Y + 1.772 \,(U' - 128)
+\end{aligned}
+$$
+
+For two pixels (odd and even) per 8-cycle iteration that's six output channels (R/G/B × odd/even). Each output is a sum of three signed 32-bit products. With 18 raw multiplications per pixel pair, naive parallel hardware would burn 18 multipliers — over the project budget. The implemented design uses **4 hardware-multiplexed multipliers**, scheduled by the FSM to reuse each multiplier across pixel positions and coefficients within the 8-cycle window. The accumulators (`R_o_accum`, `G_o_accum`, `B_o_accum`, and the even counterparts) hold partial sums until the cycle when each one is complete.
+
+Saturation and rounding live at the output: pre-clip values that overflow 8-bit unsigned RGB are clamped before being written back to SRAM as the framebuffer for the VGA controller.
+
+## Milestone 3 — the 2-D IDCT (separable, dual-port RAM)
+
+The 2-D inverse DCT is implemented as two passes of a 1-D IDCT separated by a transpose, with a pair of dual-port RAMs holding the intermediate matrix. The two compute stages on the commit log were nicknamed `Compute_T` (column transform) and `Compute_S` (row transform):
+
+```
+8×8 DCT block (signed 16-bit coeffs)
+        │
+        ▼
+   Compute_T : 1-D IDCT down each column → write to dual-port RAM A
+        │
+        ▼
+    transpose: read column-major from RAM A, write row-major to RAM B
+        │
+        ▼
+   Compute_S : 1-D IDCT across each row of RAM B → write 8-bit pixels back to SRAM
+```
+
+The dual-port RAMs let the read for stage N and the write for stage N−1 overlap, hiding the latency that would otherwise stall the pipeline at every transpose. Coefficient ROMs are pre-computed from the standard 8-point IDCT cosine matrix and shared between Compute_T and Compute_S.
+
+## Verification — three classes of bug, three different tools
+
+The bugs that cost the most time, in the order I hit them:
+
+- **Off-by-one in the block-row counter.** The fetch state machine for M2 was indexing one bit too narrow into SRAM, so the last pixel column of every 8×8 block was reading garbage. The fix was a one-bit extension of `blk_row` in both the fetch and write paths — visible only as a one-pixel artefact in the output image, but reproducible. ModelSim waveform analysis on the address bus pinned it.
+- **Fixed-point rounding drift in the IDCT.** Naive truncation accumulates error over the row-and-column traversal. The fix was an explicit round-to-nearest step at the IDCT output, with saturation to clip the signed result back to the unsigned 8-bit pixel range. Reference comparison was against a Python software model of the same decoder shipped with the project.
+- **Simulation-vs-hardware mismatches.** A combinational path I'd assumed was registered turned out to bleed across a clock boundary on the fabric. Caught by reconciling ModelSim's behavioural waveforms against Quartus's post-fit timing report — the simulator was happy, the timing analyser was not.
+
+Each class needed a different tool: ModelSim for functional correctness, the Python software model for numerical reference, Quartus's timing analyser for what the silicon actually does. None of the three on its own would have caught all the bugs.
+
+## Synthesis
+
+The full design — three compute stages plus all I/O controllers — meets the **50 MHz project constraint with positive slack** in Quartus and fits comfortably on the DE1-SoC's Cyclone V fabric. Critical-path tracing in the timing analyser pointed at one accumulator chain in the color-space converter as the dominant path; an extra register stage there bought back the slack we needed.
+
+## Lessons
+
+- **Time-multiplex when the budget is tight.** Eighteen parallel multipliers would have been "correct" in some sense and immediately rejected by the budget. Four multipliers + a careful FSM + accumulators is the same answer in fewer cells.
+- **The transpose is what dual-port RAM is for.** Without overlapped read/write, the IDCT's inter-stage transpose would have stalled the pipeline at every block boundary.
+- **One-bit address bugs are the worst kind.** They look like rounding errors. They look like aliasing. They aren't.

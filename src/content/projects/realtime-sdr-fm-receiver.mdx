@@ -1,43 +1,112 @@
 ---
-title: Real-Time Software-Defined Radio System
-summary: Multithreaded FM SDR receiver in C++17 on Raspberry Pi with mono/stereo audio and full RDS metadata decoding, prototyped end-to-end in Python first.
+title: Real-Time FM Software-Defined Radio
+summary: Real-time FM SDR on Raspberry Pi 4 recovering mono audio, stereo audio, and RDS metadata from RF input. Three-thread producer-consumer pipeline with polyphase resampling that holds real-time at 600 MHz, 101 taps.
 category: DSP / Embedded
 date: 2026-02-01
-updated: 2026-03-31
+updated: 2026-04-02
 status: Verified
 stack:
   - C++17
   - Python
-  - Raspberry Pi
-  - DSP
-  - NumPy
+  - Raspberry Pi 4
+  - GoogleTest / cocotb-style unit tests
+  - CMake
 tags:
   - DSP
   - Embedded
   - Real-Time
   - SDR
-source: "github.com/ratshgupta-guptar76"
+  - Multithreading
+source: "github.com/3dy4-2026/project-group-62-thursday"
 order: 2
 results:
-  - { label: Pipeline,            value: "3-thread producer-consumer" }
-  - { label: Resampler,           value: "Polyphase rational FIR (arbitrary U/D)" }
-  - { label: Latency improvement, value: "2.7× on embedded convolution" }
-  - { label: RDS chain,           value: "BPF → PLL → IQ demod → CDR → frame sync" }
-  - { label: Target,              value: "Raspberry Pi" }
+  - { label: Platform,            value: "Raspberry Pi 4" }
+  - { label: Modes,               value: "4 (Mode 0/1/2/3 — RF 1.84–2.4 MS/s, audio 38.4–48 kS/s)" }
+  - { label: Filter taps,         value: "101 (verified at 13 / 75 / 301 across all modes)" }
+  - { label: Real-time threshold, value: "5 min run, no underrun @ 600 MHz, 75 taps" }
+  - { label: Resampler speedup,   value: "1.4× from naive convolve-decimate to polyphase" }
+  - { label: Threads,             value: "3 — IF (producer) → mono/stereo + RDS (consumers)" }
 ---
 
-The brief was to build an FM receiver that runs on a Raspberry Pi in real time, decodes mono and stereo audio, and recovers the RDS metadata stream that broadcast stations interleave with their audio. RDS is the channel that sends station name, song title, and traffic info — useful for the project because it forces the signal-processing chain to be both sample-accurate and well-pipelined.
+The 3DY4 capstone built a real-time FM software-defined radio on a Raspberry Pi 4. The receiver consumes IQ samples from an RF dongle and produces three outputs in parallel: mono audio, stereo audio, and decoded RDS metadata (station name, song title, traffic info). The whole signal chain — front-end filtering, FM demodulation, three independent audio/data paths, and the threading layer that ties them together — runs in software on a $50 board, with custom RF / IF / audio rates assigned per group.
+
+Built as a group of four (Ratish Gupta, Gorazd Bocev, Manav Patel, Jaavin Mohanakumar). My personal contributions were the mono-path optimization that unblocked real-time operation, and the RDS modelling and C++ debugging — band-pass channel extraction, carrier recovery via squaring non-linearity, demodulation, Manchester / differential decoding.
+
+## Mode set (group 62)
+
+| Mode | RF Fs (kS/s) | IF Fs (kS/s) | Audio Fs (kS/s) | Block (ms) | RDS |
+| ---: | -----------: | -----------: | --------------: | ---------: | :-- |
+|    0 |       2400.0 |        240.0 |            48.0 |         40 | yes |
+|    1 |       1843.2 |        307.2 |            38.4 |         25 | no  |
+|    2 |       2400.0 |        240.0 |            44.1 |         70 | yes |
+|    3 |       1920.0 |        384.0 |            44.1 |         30 | no  |
+
+The four modes force every block to be parameterized in tap count and sample rate. A naive resampler that closes timing for one mode will underrun on another.
 
 ## Architecture
 
-The receiver runs as three threads in a producer-consumer pipeline: an RF front-end thread that pulls IQ samples, a demodulation thread that produces audio, and an RDS thread that recovers the data stream. Decoupling them with bounded queues was the only way to keep audio glitch-free under variable RDS workload.
+The receiver is a three-stage pipeline. The RF front end runs an anti-aliasing FIR on the raw IQ stream and decimates to the IF rate. The FM demodulator turns IQ into a real-valued baseband. From there the signal forks into three independent paths:
 
-The resampler is a polyphase rational FIR with arbitrary `U/D` ratios. The first version used a generic upsample-filter-downsample chain with intermediate buffers; replacing it with a single polyphase commutator eliminated the intermediate allocation and cut convolution latency on the Pi by 2.7×.
+- **Mono path** — LPF + decimation to the audio rate.
+- **Stereo path** — 19 kHz pilot BPF → PLL recovers the 38 kHz stereo carrier (NCO phase locked) → mixer downconverts the L−R difference signal → LPF + decimation → combined with the mono branch into L/R channels.
+- **RDS path** — 57 kHz channel BPF → squaring non-linearity (BPSK has phase ambiguity at 0 and π; squaring doubles the frequency to 114 kHz and removes it) → PLL on 114 kHz with NCO + delay match → mixer + LPF → polyphase rational resampler to `SPS × 2375 sym/s` → root-raised cosine matched filter → peak-tracking CDR → Manchester + differential decode → frame sync.
 
-## Implementation
+Threading is producer-consumer with bounded queues. The IF thread is the producer; mono+stereo and RDS are independent consumers. Two thread-safe queues, each guarded by a mutex and two condition variables (full / empty) so threads block in `wait()` rather than polling. Queue depth = 10 — enough to absorb jitter without bloating latency. End-of-stream is signalled by a wrapper struct with an `eos` flag pushed into both queues.
 
-I prototyped the full RDS decode chain in Python first — band-pass filter, carrier recovery, PLL, IQ demodulation, root-raised-cosine matched filter, clock-and-data recovery, Manchester decode, differential decode, frame sync — and only then ported it to C++17. Doing it that way meant every block had a NumPy reference I could regression-test the C++ implementation against, instead of debugging signal-processing bugs and translation bugs at the same time.
+## Mono path — the optimization that unblocked real time
 
-## Verification
+The mono path is the foundation, and getting it real-time was the gating problem. The lab convolve-and-decimate fused operation worked at 1.5 GHz / 75 taps but underran the moment we pushed to lower clocks or higher tap counts.
 
-The hardest bug was a CDR alignment failure that only appeared at block boundaries in the streaming pipeline. The Python prototype processed the whole capture in one buffer and never hit it; the C++ version processed in chunks and the symbol-timing recovery would slip every time a new chunk arrived. I caught it by plotting the IQ constellation as the stream advanced — the points would cluster cleanly within a chunk and then smear across the boundary. The fix was to carry the CDR state across chunks rather than re-initialising per buffer.
+Three rounds of optimization, in order:
+
+1. **Polyphase rational resampler.** Modelled it in Python first to confirm the math, then ported. The polyphase commutator skips zero-multiplications and computes only the samples actually retained — for a $U/D$ resampler at 101 taps this cuts the multiply count by roughly the upsample factor. **1.4× wall-clock speedup** on Pi.
+2. **Loop unrolling + precomputed constants.** Hot inner loops were rewritten to pull invariants (resize bounds, division factors) out of the body.
+3. **Conditional resize / reserve.** Output buffers were `reserve()`-ed once and the resize-vs-clear path was guarded so the allocator wasn't hit per block.
+
+After all three, mono ran clean at **600 MHz, 101 taps, no underrun for 5 minutes** across every mode. The same FIR machinery then served stereo and RDS.
+
+## Stereo path — PLL and the off-by-one
+
+Stereo modelling was done in Python first (PSD plots, isolated-channel inspection, PLL debug). The first port to C++ had two real bugs:
+
+- **PLL block-state transition.** The last sample of one block was supposed to be reused as the first of the next. The state was being carried across, but the sample itself was duplicated — kept in the previous block AND prepended to the next — making each block one sample too long. The off-by-one smeared into stereo "bleed" between channels.
+- **Missing Hann window on the C++ BPF.** The Python BPF used a Hann window, the C++ port didn't. The DC offset that introduced was caught by a unit test that I initially dismissed as overly strict. In hindsight: failed validation should be investigated, even when the measured error looks small.
+
+Fix was to compute the all-pass mono-branch delay dynamically from the tap count (it had been hardcoded), correct the block-boundary handoff in the PLL, and apply the window. After the fixes, channel separation was clean.
+
+## RDS path
+
+This is where I spent most of my time on the model and the debugging. The signal flow:
+
+```python
+# Carrier recovery: squaring non-linearity removes BPSK phase ambiguity.
+# Signal at 57 kHz with phase in {0, π} → squared signal at 114 kHz with no phase ambiguity.
+sq = rds_band ** 2
+# Gain of 2 to conserve power (squaring halves it)
+sq *= 2
+# 114 kHz BPF + PLL + NCO recovers the carrier; delay-match the I path
+i_carrier, q_carrier = pll_114k(sq)
+# Mix back to baseband, LPF, polyphase resample to SPS × 2375 sym/s
+i_bb = lowpass(mixer(rds_band_delayed, i_carrier))
+i_resampled = polyphase_resample(i_bb, U, D)
+# Root-raised cosine matched filter shapes pulses for zero-ISI sampling
+i_rrc = rrc(i_resampled, sps, beta=0.5)
+```
+
+Two pieces took real debugging:
+
+**Peak-tracking CDR.** The first version used a fixed decimation phase and fell out of sync within seconds. The replacement is a peak-tracking CDR with early-late timing detection. The first block (after a 0.5s warmup for PLL lock) brute-forces every possible decimation phase and picks the one with the highest "score" — the mean absolute value of samples spaced `sps` apart. After that, a drift accumulator tracks the running difference between the early and late samples; when it crosses a threshold, the phase shifts by one. Constellation plots before/after were night and day — points went from a smear to two well-separated clusters at $\pm 0.5$ on the I axis.
+
+**Manchester decoding edge case.** The lab tested only against `Samples3.raw`, where the "next sample" decoding rule worked. With other captures, one rule produced a flood of HH/LL invalid pairs and the other did not — so the right choice depends on the recording. The fix: at the start of a stream, brute-force both rules on the first block and pick whichever produced fewer invalid pairs. Then commit to it.
+
+**Frame synchronization** (Gorazd's piece, but worth documenting because it's the last hop) used per-block syndrome computation against the RDS spec, with state saved across chunk boundaries so a lock formed in block N would persist into block N+1. False-positive syndromes in invalid block transitions (e.g. A→C) were filtered by enforcing the expected ordering and 26-bit spacing.
+
+## Measurements
+
+At 101 taps, frontend time on Mode 0 ranged from **8.27 ms/block at 1.5 GHz** to **20.57 ms/block at 600 MHz** — roughly linear with clock, as expected for a MAC-bound workload. RDS adds another ~25 ms/block at 600 MHz on top, dominated by the RDS LPF (13.5 ms) and carrier recovery (12.4 ms). At 13 taps the audio was legible but staticky; at 301 taps the audio was indistinguishable from 101 taps, so 101 sat at the knee of the diminishing-returns curve and we ran the final system there.
+
+## Lessons
+
+- **Optimize once, reuse three times.** The polyphase resampler unlocked mono first and then carried us through stereo and RDS without re-paying the optimization cost.
+- **Trust the unit tests, even the strict ones.** The Hann-window DC-offset failure was a real bug dismissed as a flaky check. Cost a day of stereo-bleed debugging.
+- **MACs aren't the whole picture.** Resampling, when not implemented as polyphase, can dominate timing while showing up in MAC counts as cheap. Profile, don't estimate.

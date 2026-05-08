@@ -18,10 +18,10 @@ const PROJECTS = [
   {
     id: "02",
     slug: "realtime-sdr-fm-receiver",
-    title: "Real-Time Software-Defined Radio System",
+    title: "Real-Time FM Software-Defined Radio",
     category: "DSP / Embedded",
     description:
-      "Multithreaded FM SDR receiver in C++17 on Raspberry Pi with mono/stereo audio and full RDS metadata decoding. Polyphase rational FIR resampler eliminated intermediate allocation, cutting embedded convolution latency by 2.7×.",
+      "Real-time FM SDR on Raspberry Pi 4 recovering mono audio, stereo audio, and RDS metadata from RF input. Three-thread producer-consumer pipeline with polyphase resampling — 1.4× speedup, holds real time at 600 MHz, 101 taps, no underrun over 5 minutes.",
     image:
       "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwZGFyayUyMGxpZ2h0c3xlbnwxfHx8fDE3NzI5MDU1NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
     tags: ["C++17", "Python", "DSP", "Raspberry Pi"],
@@ -32,9 +32,20 @@ const PROJECTS = [
     title: "RTL Image Decompression Pipeline",
     category: "FPGA / RTL",
     description:
-      "FPGA image decoder in SystemVerilog on Altera DE1-SoC at 50 MHz: chroma upsampling, YCbCr→RGB conversion, and 2-D inverse DCT. Pipelined 8-state FSM with 4 hardware-multiplexed multipliers; 55 MHz Fmax with positive timing slack.",
+      "JPEG-style FPGA image decoder on Altera DE1-SoC at 50 MHz. Chroma upsampling, YCbCr→RGB conversion, and 2-D inverse DCT across ~2,600 lines of SystemVerilog. Four hardware-multiplexed multipliers feed 6 outputs per pixel pair; dual-port RAM hides the IDCT transpose.",
     image:
       "https://images.unsplash.com/photo-1698714260145-7b4f36737f33?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwaGFyZHdhcmUlMjB0ZXJtaW5hbHxlbnwxfHx8fDE3NzI5MDU1NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    tags: ["SystemVerilog", "Quartus", "ModelSim", "DE1-SoC"],
+  },
+  {
+    id: "04",
+    slug: "tof-3d-room-scanner",
+    title: "ToF 3D Room Scanner",
+    category: "FPGA / RTL",
+    description:
+      "Time-of-Flight (ToF) 3D room scanner using FPGA-based image processing. Real-time depth map generation and point cloud reconstruction.",
+    image:
+      "https://images.unsplash.com/photo-1656510922456-e9018507288f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8M2QlMjBtZXNofGVufDB8fDB8fHww",
     tags: ["SystemVerilog", "Quartus", "ModelSim", "DE1-SoC"],
   },
 ];
