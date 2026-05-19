@@ -140,7 +140,7 @@ export function Projects() {
       <SectionHeader title="Selected Work" subtitle="01 / Projects" />
 
       <div className="flex flex-col gap-20 lg:gap-32 w-full">
-        {PROJECTS.map((project, index) => (
+        {PROJECTS.slice(0, 3).map((project, index) => (
           <ProjectCard key={project.id} project={project} index={index} />
         ))}
       </div>
