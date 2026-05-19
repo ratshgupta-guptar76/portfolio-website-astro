@@ -41,12 +41,12 @@ const PROJECTS = [
     id: "04",
     slug: "tof-3d-room-scanner",
     title: "ToF 3D Room Scanner",
-    category: "FPGA / RTL",
+    category: "Embedded / Sensor Fusion",
     description:
-      "Time-of-Flight (ToF) 3D room scanner using FPGA-based image processing. Real-time depth map generation and point cloud reconstruction.",
+      "Tabletop room scanner — TI Tiva C (Cortex-M4F) drives a stepper motor and an ST VL53L1X time-of-flight sensor in a coordinated sweep. 128 angular samples per revolution across 50 vertical planes, streamed as CSV over UART, then rendered as a 3D wireframe in Open3D.",
     image:
       "https://images.unsplash.com/photo-1656510922456-e9018507288f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8M2QlMjBtZXNofGVufDB8fDB8fHww",
-    tags: ["SystemVerilog", "Quartus", "ModelSim", "DE1-SoC"],
+    tags: ["ARM Cortex-M", "Bare-Metal C", "I²C", "Open3D"],
   },
 ];
 
