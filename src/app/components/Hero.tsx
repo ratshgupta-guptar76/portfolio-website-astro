@@ -209,58 +209,6 @@ function FloatingPanel({
   );
 }
 
-// --- Loading Counter ---
-function LoadingCounter() {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const duration = 1500;
-    const interval = 20;
-    const steps = duration / interval;
-    let currentStep = 0;
-
-    const timer = setInterval(() => {
-      currentStep++;
-      // Ease-out curve for more organic feel
-      const t = currentStep / steps;
-      const eased = 1 - Math.pow(1 - t, 3);
-      setProgress(Math.min(100, Math.floor(eased * 100)));
-
-      if (currentStep >= steps) {
-        clearInterval(timer);
-      }
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="mb-12 flex flex-col items-center gap-6"
-    >
-      <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#706d65]">
-        Initializing
-      </span>
-
-      <div className="font-mono text-3xl md:text-4xl font-light text-primary leading-none tracking-[-0.02em] tabular-nums w-12">
-        {progress.toString().padStart(3, "0")}
-      </div>
-
-      <div className="w-24 h-px bg-white/[0.1] relative overflow-hidden">
-        <motion.div
-          className="absolute inset-y-0 left-0 bg-white/20"
-          initial={{ width: "0%" }}
-          animate={{ width: `${progress}%` }}
-          transition={{ ease: "linear", duration: 0.05 }}
-        />
-      </div>
-    </motion.div>
-  );
-}
-
 // --- Main Hero ---
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -455,14 +403,14 @@ export function Hero() {
 
         {/* Scroll indicator */}
         <motion.a
-          href="#projects"
+          href="#about"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.6 }}
           className="mt-20 group flex flex-col items-center gap-3 cursor-pointer"
         >
           <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#5a5750] group-hover:text-[#ebe6dd]/60 transition-colors duration-700">
-            Selected Work
+            Begin
           </span>
           <div className="w-px h-10 bg-white/[0.06] relative overflow-hidden">
             <motion.div
