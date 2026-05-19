@@ -32,6 +32,7 @@ export function Blog() {
       <SectionHeader title="Selected Writing" subtitle="03 / Thoughts" />
 
       <div className="w-full max-w-3xl">
+        {/* Writing list hidden while pages are temporarily disabled
         {WRITINGS.map((post, i) => (
           <motion.div
             key={post.id}
@@ -70,9 +71,11 @@ export function Blog() {
           </a>
           </motion.div>
         ))}
+        */}
       </div>
 
       <div className="mt-16 w-full max-w-3xl flex justify-end">
+        {/*
         <a
           href="/blog"
           className="group inline-flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-primary transition-colors duration-300"
@@ -80,6 +83,7 @@ export function Blog() {
           <span>All Notes</span>
           <span className="w-6 h-px bg-white/20 group-hover:w-10 group-hover:bg-primary transition-all duration-500" />
         </a>
+        */}
       </div>
     </Section>
   );

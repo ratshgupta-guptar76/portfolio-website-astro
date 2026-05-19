@@ -8,34 +8,45 @@ const PROJECTS = [
     id: "01",
     slug: "int8-systolic-mac-array",
     title: "INT8 Systolic MAC Array",
-    category: "Architecture / FPGA",
+    category: "FPGA / Architecture",
     description:
-      "High-performance matrix multiplication engine implemented in SystemVerilog. Designed for edge ML inference with configurable data paths and aggressive timing closure.",
+      "Parameterized 8×8 output-stationary INT8/INT32 systolic MAC array in SystemVerilog for transformer Q/K/V/O and FFN matmuls. Closed timing at 100 MHz with +3.76 ns slack on Xilinx Artix-7, peak 12.8 GOPS at 100 MHz, 64 DSP48E1 slices.",
     image:
       "https://images.unsplash.com/photo-1768527858342-037cff722276?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMGdyaWQlMjBkYXJrfGVufDF8fHx8MTc3MjkwNTU1MXww&ixlib=rb-4.1.0&q=80&w=1080",
-    tags: ["SystemVerilog", "FPGA", "Synthesis"],
+    tags: ["SystemVerilog", "Vivado", "cocotb", "Verilator"],
   },
   {
     id: "02",
-    slug: "riscv-pipelined-core",
-    title: "RISC-V Pipelined Core",
-    category: "Digital Logic / FPGA",
+    slug: "realtime-sdr-fm-receiver",
+    title: "Real-Time FM Software-Defined Radio",
+    category: "DSP / Embedded",
     description:
-      "5-stage pipelined RV32I core with custom vector extensions and branch prediction. Verified via UVM and deployed on Xilinx UltraScale+ with full HW/SW co-simulation.",
+      "Real-time FM SDR on Raspberry Pi 4 recovering mono audio, stereo audio, and RDS metadata from RF input. Three-thread producer-consumer pipeline with polyphase resampling — 1.4× speedup, holds real time at 600 MHz, 101 taps, no underrun over 5 minutes.",
     image:
       "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwZGFyayUyMGxpZ2h0c3xlbnwxfHx8fDE3NzI5MDU1NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    tags: ["Verilog", "RISC-V", "FPGA"],
+    tags: ["C++17", "Python", "DSP", "Raspberry Pi"],
   },
   {
     id: "03",
-    slug: "uvm-verification-framework",
-    title: "UVM Verification Framework",
-    category: "Verification / Methodology",
+    slug: "rtl-image-decompression-pipeline",
+    title: "RTL Image Decompression Pipeline",
+    category: "FPGA / RTL",
     description:
-      "Production-grade constrained-random verification environment for a networking SoC. Achieved 100% functional coverage with automated regression and assertion-based checks.",
+      "JPEG-style FPGA image decoder on Altera DE1-SoC at 50 MHz. Chroma upsampling, YCbCr→RGB conversion, and 2-D inverse DCT across ~2,600 lines of SystemVerilog. Four hardware-multiplexed multipliers feed 6 outputs per pixel pair; dual-port RAM hides the IDCT transpose.",
     image:
       "https://images.unsplash.com/photo-1698714260145-7b4f36737f33?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwaGFyZHdhcmUlMjB0ZXJtaW5hbHxlbnwxfHx8fDE3NzI5MDU1NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    tags: ["UVM", "SystemVerilog", "Coverage"],
+    tags: ["SystemVerilog", "Quartus", "ModelSim", "DE1-SoC"],
+  },
+  {
+    id: "04",
+    slug: "tof-3d-room-scanner",
+    title: "ToF 3D Room Scanner",
+    category: "FPGA / RTL",
+    description:
+      "Time-of-Flight (ToF) 3D room scanner using FPGA-based image processing. Real-time depth map generation and point cloud reconstruction.",
+    image:
+      "https://images.unsplash.com/photo-1656510922456-e9018507288f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8M2QlMjBtZXNofGVufDB8fDB8fHww",
+    tags: ["SystemVerilog", "Quartus", "ModelSim", "DE1-SoC"],
   },
 ];
 

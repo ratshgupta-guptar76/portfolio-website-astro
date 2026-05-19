@@ -1,0 +1,406 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  maxZoom?: number;
+  hint?: string;
+}
+
+const {
+  src,
+  alt,
+  maxZoom,
+  hint = 'Pinch or Ctrl+scroll to zoom. Drag to pan. Double-click to reset.',
+} = Astro.props;
+---
+
+<div class="zoom-svg" style={`--max-zoom:${maxZoom ?? ''};`} data-zoom-root>
+  <div class="zoom-svg__hint">
+    <span>{hint}</span>
+    <button type="button" class="zoom-svg__popout" data-zoom-popout aria-label="Open larger schematic view">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M4 9V4h5" />
+        <path d="M20 15v5h-5" />
+        <path d="M20 9V4h-5" />
+        <path d="M4 15v5h5" />
+      </svg>
+    </button>
+  </div>
+  <div class="zoom-svg__viewport" data-zoom-viewport>
+    <img src={src} alt={alt} loading="lazy" decoding="async" draggable="false" />
+  </div>
+</div>
+
+<dialog class="zoom-svg__dialog" data-zoom-dialog>
+  <div class="zoom-svg__dialog-shell" data-zoom-root>
+    <div class="zoom-svg__dialog-bar">
+      <span>{hint}</span>
+      <button type="button" class="zoom-svg__close" data-zoom-close aria-label="Close larger schematic view">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M6 6l12 12" />
+          <path d="M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+    <div class="zoom-svg__dialog-viewport zoom-svg__viewport" data-zoom-viewport>
+      <img src={src} alt={alt} loading="lazy" decoding="async" draggable="false" />
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .zoom-svg {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.375rem;
+    background: rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+
+  .zoom-svg__hint {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    user-select: none;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a8a39a;
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .zoom-svg__popout,
+  .zoom-svg__close {
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    color: #ebe6dd;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    cursor: pointer;
+    transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+  }
+
+  .zoom-svg__popout:hover,
+  .zoom-svg__close:hover {
+    border-color: rgba(235, 230, 221, 0.42);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .zoom-svg__popout svg,
+  .zoom-svg__close svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .zoom-svg__viewport {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    max-height: min(78vh, 960px);
+    overflow: hidden;
+    touch-action: none;
+    cursor: grab;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .zoom-svg__viewport.is-dragging {
+    cursor: grabbing;
+  }
+
+  .zoom-svg img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    min-width: 720px;
+    transform-origin: top left;
+    will-change: width, transform;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .zoom-svg__dialog {
+    width: min(96vw, 1600px);
+    height: min(92vh, 1100px);
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    background: rgba(7, 7, 9, 0.96);
+    color: inherit;
+    overflow: hidden;
+    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.55);
+  }
+
+  .zoom-svg__dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+  }
+
+  .zoom-svg__dialog-shell {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .zoom-svg__dialog-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a8a39a;
+  }
+
+  .zoom-svg__dialog-viewport {
+    flex: 1 1 auto;
+    max-height: none;
+  }
+</style>
+
+<script>
+  const clampMin = (value, min) => Math.max(min, value);
+
+  const initViewer = (root) => {
+    const viewport = root.querySelector('[data-zoom-viewport]');
+    const image = root.querySelector('img');
+    if (!viewport || !image) return;
+
+    const maxZoomRaw = Number.parseFloat(root.style.getPropertyValue('--max-zoom'));
+    const maxZoom = Number.isFinite(maxZoomRaw) && maxZoomRaw > 1 ? maxZoomRaw : Number.POSITIVE_INFINITY;
+
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    let baseWidth = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragOriginX = 0;
+    let dragOriginY = 0;
+
+    const pointers = new Map();
+    let pinchStartDistance = 0;
+    let pinchStartScale = 1;
+
+    const getPanBuffer = () => {
+      const widthBuffer = Math.max(48, viewport.clientWidth * 0.08);
+      const heightBuffer = Math.max(48, viewport.clientHeight * 0.08);
+      return { widthBuffer, heightBuffer };
+    };
+
+    const clampOffsets = () => {
+      const { widthBuffer, heightBuffer } = getPanBuffer();
+      const contentWidth = baseWidth * scale;
+      const contentHeight = image.getBoundingClientRect().height || contentWidth * 3;
+
+      const minX = viewport.clientWidth - contentWidth - widthBuffer;
+      const maxX = widthBuffer;
+      const minY = viewport.clientHeight - contentHeight - heightBuffer;
+      const maxY = heightBuffer;
+
+      offsetX = Math.min(maxX, Math.max(minX, offsetX));
+      offsetY = Math.min(maxY, Math.max(minY, offsetY));
+    };
+
+    const applyTransform = () => {
+      if (baseWidth > 0) {
+        image.style.width = `${baseWidth * scale}px`;
+      }
+      clampOffsets();
+      image.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+    };
+
+    const measureBaseWidth = () => {
+      if (scale === 1) {
+        baseWidth = viewport.clientWidth;
+      }
+    };
+
+    const zoomAt = (nextScale, clientX, clientY) => {
+      const bounded = clampMin(nextScale, 1);
+      const finalScale = Number.isFinite(maxZoom) ? Math.min(bounded, maxZoom) : bounded;
+      if (finalScale === scale) return;
+
+      const rect = viewport.getBoundingClientRect();
+      const localX = clientX - rect.left;
+      const localY = clientY - rect.top;
+
+      const contentX = (localX - offsetX) / scale;
+      const contentY = (localY - offsetY) / scale;
+      scale = finalScale;
+      applyTransform();
+
+      offsetX = localX - contentX * scale;
+      offsetY = localY - contentY * scale;
+      applyTransform();
+    };
+
+    const reset = () => {
+      scale = 1;
+      offsetX = 0;
+      offsetY = 0;
+      measureBaseWidth();
+      applyTransform();
+    };
+
+    viewport.addEventListener(
+      'wheel',
+      (event) => {
+        if (!event.ctrlKey) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.12 : 0.88;
+        zoomAt(scale * factor, event.clientX, event.clientY);
+      },
+      { passive: false }
+    );
+
+    viewport.addEventListener('dblclick', () => reset());
+
+    viewport.addEventListener('pointerdown', (event) => {
+      viewport.setPointerCapture(event.pointerId);
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+      if (pointers.size === 1 && scale > 1) {
+        isDragging = true;
+        dragStartX = event.clientX;
+        dragStartY = event.clientY;
+        dragOriginX = offsetX;
+        dragOriginY = offsetY;
+        viewport.classList.add('is-dragging');
+      }
+
+      if (pointers.size === 2) {
+        const values = [...pointers.values()];
+        const dx = values[0].x - values[1].x;
+        const dy = values[0].y - values[1].y;
+        pinchStartDistance = Math.hypot(dx, dy);
+        pinchStartScale = scale;
+      }
+    });
+
+    viewport.addEventListener('pointermove', (event) => {
+      if (!pointers.has(event.pointerId)) return;
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+      if (pointers.size === 2) {
+        const values = [...pointers.values()];
+        const dx = values[0].x - values[1].x;
+        const dy = values[0].y - values[1].y;
+        const nextDistance = Math.hypot(dx, dy);
+
+        if (pinchStartDistance > 0) {
+          const nextScale = pinchStartScale * (nextDistance / pinchStartDistance);
+          const midX = (values[0].x + values[1].x) / 2;
+          const midY = (values[0].y + values[1].y) / 2;
+          zoomAt(nextScale, midX, midY);
+        }
+        return;
+      }
+
+      if (isDragging) {
+        const dx = event.clientX - dragStartX;
+        const dy = event.clientY - dragStartY;
+        offsetX = dragOriginX + dx;
+        offsetY = dragOriginY + dy;
+        applyTransform();
+      }
+    });
+
+    const clearPointer = (pointerId) => {
+      pointers.delete(pointerId);
+
+      if (pointers.size < 2) {
+        pinchStartDistance = 0;
+      }
+
+      if (pointers.size === 0) {
+        isDragging = false;
+        viewport.classList.remove('is-dragging');
+      }
+    };
+
+    viewport.addEventListener('pointerup', (event) => clearPointer(event.pointerId));
+    viewport.addEventListener('pointercancel', (event) => clearPointer(event.pointerId));
+    viewport.addEventListener('pointerleave', (event) => {
+      if (event.pointerType === 'mouse') {
+        clearPointer(event.pointerId);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      measureBaseWidth();
+      applyTransform();
+    });
+
+    image.addEventListener('load', () => {
+      measureBaseWidth();
+      applyTransform();
+    });
+
+    measureBaseWidth();
+    applyTransform();
+  };
+
+  const root = document.querySelector('[data-zoom-root]');
+  if (root) {
+    initViewer(root);
+  }
+
+  const dialog = document.querySelector('[data-zoom-dialog]');
+  const dialogRoot = dialog?.querySelector('[data-zoom-root]');
+  if (dialogRoot) {
+    initViewer(dialogRoot);
+  }
+
+  const popoutButton = document.querySelector('[data-zoom-popout]');
+  const closeButton = document.querySelector('[data-zoom-close]');
+
+  if (dialog && popoutButton) {
+    popoutButton.addEventListener('click', () => {
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    });
+  }
+
+  if (dialog && closeButton) {
+    closeButton.addEventListener('click', () => dialog.close());
+  }
+
+  if (dialog) {
+    dialog.addEventListener('click', (event) => {
+      const rect = dialog.getBoundingClientRect();
+      const inDialog = rect.top <= event.clientY && event.clientY <= rect.top + rect.height && rect.left <= event.clientX && event.clientX <= rect.left + rect.width;
+      if (!inDialog) {
+        dialog.close();
+      }
+    });
+  }
+</script>

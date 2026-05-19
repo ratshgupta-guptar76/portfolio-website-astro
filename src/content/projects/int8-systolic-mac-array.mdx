@@ -48,6 +48,8 @@ synthesis:
     }
 ---
 
+import ZoomableSvg from '../../components/ZoomableSvg.astro';
+
 When I started this project I was thinking about transformer inference and where the cycles actually go. The answer, when you profile a transformer on a CPU, is unsurprising: most of the time is matrix multiplication, and most of _that_ time is spent waiting on memory rather than doing arithmetic. Modern CPUs can do far more multiplies per second than they can read operands per second, which is why GPUs and dedicated accelerators exist in the first place.
 
 A systolic array is one of the cleaner answers to this problem. The idea is older than I am — Kung and Leiserson published it in 1978 — but it's the same architecture you'll find at the core of Google's TPU today. You build a small grid of multiply-accumulate cells, you stream operands through it, and each operand gets reused across many cells before it leaves. One memory read, many compute operations. That's the pitch.
@@ -168,14 +170,10 @@ module pe (
 endmodule
 ```
 <figure>
-  <div class="w-full aspect-[4/3] border border-white/[0.08] rounded overflow-hidden">
-    <iframe
-      src="/pdfs/int8-systolic-mac-array/PE_schematic.pdf"
-      title="PE schematic PDF"
-      class="w-full h-full"
-      scrolling="no"
-    ></iframe>
-  </div>
+  <ZoomableSvg
+    src="/pdfs/int8-systolic-mac-array/PE_schematic.svg"
+    alt="PE schematic"
+  />
   <figcaption>Fig. 2 — Synthesized PE schematic. The use_dsp attribute maps the multiply to one DSP48E1 slice with the accumulator looping back through the P port.</figcaption>
 </figure>
 
