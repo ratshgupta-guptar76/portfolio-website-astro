@@ -16,8 +16,8 @@ const years = Object.keys(grouped).map(Number).sort((a, b) => b - a);
 const dateFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
 ---
 
-<BaseLayout title="Writing | Ratish Gupta" description="Notes and essays on RTL, verification, and architecture.">
-  <PageHeader client:load kicker="Index · Writing" title="Notes & Essays" lede="Short pieces on RTL, verification, and the work of turning architecture into silicon." back={{ to: '/', label: 'Back to Home' }} />
+<BaseLayout title="Writing | Ratish Gupta" description="Notes on RTL, verification, and architecture — plus the occasional piece outside of engineering.">
+  <PageHeader client:load kicker="Index · Writing" title="Notes & Essays" lede="Notes on RTL, verification, and architecture — plus the occasional piece outside of engineering." back={{ to: '/', label: 'Back to Home' }} />
 
   <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 md:pb-40">
     {years.map((year) => (
