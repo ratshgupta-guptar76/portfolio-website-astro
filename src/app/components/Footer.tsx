@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Github, Linkedin, Twitter, Mail } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { Section } from "./ui/Section";
 import { useState } from "react";
 import { projectId, publicAnonKey } from "../../../utils/supabase/info";
@@ -61,7 +61,7 @@ export function Footer() {
 
           <div className="flex flex-col gap-4 mt-auto">
             <a
-              href="mailto:hello@ratishgupta.com"
+              href="mailto:guptar76@mcmaster.ca"
               className="group inline-flex items-center gap-3 hover:opacity-80 transition-opacity"
             >
               <Mail
@@ -69,19 +69,28 @@ export function Footer() {
                 className="text-muted-foreground group-hover:text-primary transition-colors"
               />
               <span className="font-mono text-[11px] tracking-[0.15em] text-primary">
-                hello@ratishgupta.com
+                guptar76@mcmaster.ca
               </span>
             </a>
 
             <div className="flex items-center gap-6 mt-4">
               {[
-                { Icon: Github, label: "Github" },
-                { Icon: Linkedin, label: "LinkedIn" },
-                { Icon: Twitter, label: "Twitter" },
-              ].map(({ Icon, label }) => (
+                {
+                  Icon: Github,
+                  label: "Github",
+                  href: "https://github.com/ratshgupta-guptar76",
+                },
+                {
+                  Icon: Linkedin,
+                  label: "LinkedIn",
+                  href: "https://linkedin.com/in/ratish-gupta",
+                },
+              ].map(({ Icon, label, href }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground hover:text-primary transition-colors"
                 >
                   <Icon size={12} />

@@ -119,7 +119,7 @@ export function Navbar({ currentPath = "/" }: { currentPath?: string }) {
 
             <div className="px-12 pb-12">
               <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-                hello@ratishgupta.com
+                guptar76@mcmaster.ca
               </span>
             </div>
           </motion.div>
