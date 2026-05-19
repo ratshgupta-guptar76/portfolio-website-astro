@@ -108,6 +108,7 @@ function FloatingPanel({
         <motion.img
           src={imgSrc}
           alt=""
+          decoding="async"
           className="w-full h-full object-cover"
           animate={{
             filter: hovered ? "grayscale(0%)" : "grayscale(100%)",
@@ -165,9 +166,13 @@ export function Hero() {
   const smoothMouseY = useSpring(mouseY, { damping: 50, stiffness: 100 });
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
     let rafId: number | null = null;
     let latestX = 0;
     let latestY = 0;
+    let attached = false;
 
     const update = () => {
       rafId = null;
@@ -183,12 +188,36 @@ export function Hero() {
       }
     };
 
-    window.addEventListener("mousemove", handleMouse, { passive: true });
-    return () => {
+    const attach = () => {
+      if (attached) return;
+      window.addEventListener("mousemove", handleMouse, { passive: true });
+      attached = true;
+    };
+    const detach = () => {
+      if (!attached) return;
       window.removeEventListener("mousemove", handleMouse);
+      attached = false;
       if (rafId !== null) {
         cancelAnimationFrame(rafId);
+        rafId = null;
       }
+    };
+
+    // Only listen to mousemove when the Hero is actually on-screen.
+    // Doesn't fire during scroll within Hero (still intersecting); only when
+    // Hero leaves/enters the viewport entirely.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) attach();
+        else detach();
+      },
+      { threshold: 0 },
+    );
+    io.observe(container);
+
+    return () => {
+      io.disconnect();
+      detach();
     };
   }, [mouseX, mouseY]);
 
