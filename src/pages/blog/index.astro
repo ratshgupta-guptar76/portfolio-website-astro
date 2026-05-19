@@ -23,8 +23,8 @@ const dateFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit
     {years.map((year) => (
       <article class="mb-16 last:mb-0">
         <div class="flex items-baseline gap-4 mb-4 pb-3 border-b border-white/[0.06]">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#706d65]">{year}</span>
-          <span class="font-mono text-[10px] tracking-[0.2em] text-[#3f3d38]">· {grouped[year].length} {grouped[year].length === 1 ? 'entry' : 'entries'}</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#9a958c]">{year}</span>
+          <span class="font-mono text-[10px] tracking-[0.2em] text-[#7a766e]">· {grouped[year].length} {grouped[year].length === 1 ? 'entry' : 'entries'}</span>
         </div>
 
         <ul>
@@ -33,12 +33,12 @@ const dateFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit
               <a href={`/blog/${post.id}`} class="group block py-7 hover:bg-white/[0.015] transition-colors duration-500 -mx-3 px-3">
                 <div class="flex items-baseline justify-between gap-6">
                   <h3 class="font-serif text-[22px] text-[#ebe6dd] leading-[1.25] tracking-tight group-hover:text-white transition-colors flex items-center gap-3">{post.data.title}</h3>
-                  <span class="font-mono text-[11px] tracking-[0.1em] text-[#706d65] whitespace-nowrap shrink-0">{dateFmt.format(post.data.date)}</span>
+                  <span class="font-mono text-[11px] tracking-[0.1em] text-[#9a958c] whitespace-nowrap shrink-0">{dateFmt.format(post.data.date)}</span>
                 </div>
                 <p class="font-serif text-[15px] text-[#8a8680] leading-[1.6] mt-2 max-w-2xl">{post.data.lede}</p>
                 <div class="flex flex-wrap gap-1.5 mt-4">
                   {post.data.tags.map((tag) => (
-                    <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#706d65] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>
+                    <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#9a958c] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>
                   ))}
                 </div>
               </a>

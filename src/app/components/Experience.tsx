@@ -147,7 +147,7 @@ export function Experience() {
                         delay: index * 0.1 + 0.35 + i * 0.07,
                         ease: "easeOut",
                       }}
-                      className="relative pl-5 text-[14px] text-muted-foreground font-sans leading-[1.75]"
+                      className="relative pl-5 text-[15px] text-muted-foreground font-sans leading-[1.75]"
                     >
                       <span className="absolute left-0 top-[10px] size-[4px] rotate-45 bg-[#b08d57]/70" />
                       {bullet}
