@@ -192,12 +192,22 @@ export function Hero() {
     };
   }, [mouseX, mouseY]);
 
-  // Scroll parallax layers — background slowest, foreground fastest
+  // Background layers keep the loose, floaty spring for that cinematic feel.
+  // Text gets a tighter, fast-settling spring: smooth enough to soften
+  // wheel-tick stutter, stiff/damped enough that it stops updating within
+  // a frame or two of scroll-end (no trail-off jitter).
+  const textSmooth = useSpring(scrollYProgress, {
+    damping: 45,
+    stiffness: 240,
+    mass: 0.12,
+    restDelta: 0.001,
+  });
+
   const bgScrollY = useTransform(smoothScrollY, [0, 1], ["0%", "20%"]);
   const midScrollY = useTransform(smoothScrollY, [0, 1], ["0%", "35%"]);
   const fgScrollY = useTransform(smoothScrollY, [0, 1], ["0%", "55%"]);
-  const textScrollY = useTransform(smoothScrollY, [0, 1], ["0%", "95%"]);
-  const textOpacity = useTransform(smoothScrollY, [0, 0.4], [1, 0]);
+  const textScrollY = useTransform(textSmooth, [0, 1], ["0%", "95%"]);
+  const textOpacity = useTransform(textSmooth, [0, 0.4], [1, 0]);
 
   // Floating panel parallax (midground speed)
   const panelLeftY = useTransform(smoothScrollY, [0, 1], ["0%", "30%"]);
