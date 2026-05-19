@@ -404,11 +404,11 @@ export function Hero() {
         >
           <span className="w-8 h-px bg-[#706d65]/40" />
           <span className="font-mono text-[10px] uppercase tracking-[0.45em] text-[#706d65]">
-            Hardware Engineer
+            RTL Design
           </span>
           <span className="inline-block w-1 h-1 bg-[#706d65]/50 rounded-full" />
           <span className="font-mono text-[10px] uppercase tracking-[0.45em] text-[#706d65]">
-            Digital Architecture
+            Hardware Verification
           </span>
           <span className="w-8 h-px bg-[#706d65]/40" />
         </motion.div>
@@ -448,9 +448,9 @@ export function Hero() {
           transition={{ duration: 1.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
           className="mt-8 text-[15px] md:text-[17px] text-[#8a8680] font-sans font-light leading-[1.7] max-w-[480px] tracking-[0.01em]"
         >
-          Building real hardware — from RTL architecture and digital logic
-          <br className="hidden md:block" /> to verified silicon through
-          rigorous engineering.
+          RTL design and verification on FPGA —
+          <br className="hidden md:block" /> heading toward graduate research
+          in ML-accelerator microarchitecture.
         </motion.p>
 
         {/* Scroll indicator */}
