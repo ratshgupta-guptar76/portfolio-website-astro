@@ -156,5 +156,48 @@
 		font-weight: var(--font-weight-normal);
 		line-height: 1.5;
 	}
+
+	/* Accessibility focus ring — visible only for keyboard navigation */
+	:focus-visible {
+		outline: 2px solid #ebe6dd;
+		outline-offset: 2px;
+	}
+
+	/* Skip-to-content link — invisible until focused */
+	.skip-link {
+		position: absolute;
+		top: 0;
+		left: 0;
+		transform: translateY(-150%);
+		z-index: 100;
+		background: #08080a;
+		color: #ebe6dd;
+		padding: 0.75rem 1.25rem;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		letter-spacing: 0.15em;
+		text-transform: uppercase;
+		border: 1px solid rgba(235, 230, 221, 0.4);
+		transition: transform 200ms ease;
+	}
+	.skip-link:focus {
+		transform: translateY(0.5rem) translateX(0.5rem);
+	}
 }
+
+/* // Respect users who prefer reduced motion: disable transitions and
+   // animations, and stop smooth scroll. Motion-library transforms driven
+   // by scroll/mouse keep working at default speed; the global reduction
+   // here covers CSS animations + entrance transitions. 
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.001ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.001ms !important;
+			scroll-behavior: auto !important;
+		}
+	} 
+*/
 

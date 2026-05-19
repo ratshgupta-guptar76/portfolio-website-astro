@@ -31,7 +31,7 @@ export function PageHeader({
           >
             <a
               href={back.to}
-              className="inline-flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#5a5750] hover:text-[#ebe6dd] transition-colors duration-300 mb-12 group"
+              className="inline-flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#7a766e] hover:text-[#ebe6dd] transition-colors duration-300 mb-12 group"
             >
               <ArrowLeft
                 size={14}
@@ -46,7 +46,7 @@ export function PageHeader({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#706d65] mb-6 block">
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#9a958c] mb-6 block">
             {kicker}
           </span>
           <h1 className="text-[clamp(2.25rem,5.5vw,4.5rem)] font-serif text-[#ebe6dd] leading-[0.98] tracking-[-0.02em] mb-6">
@@ -60,13 +60,5 @@ export function PageHeader({
         </motion.div>
       </div>
     </section>
-  );
-}
-
-export function TagChip({ label }: { label: string }) {
-  return (
-    <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#706d65] border border-white/[0.08] px-2.5 py-0.5 hover:border-white/[0.18] hover:text-[#ebe6dd]/80 transition-colors duration-500">
-      {label}
-    </span>
   );
 }

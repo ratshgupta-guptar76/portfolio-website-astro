@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
-import PageHeader from '../../components/astro/PageHeader.astro';
+import { PageHeader } from '../../app/components/ui/PageHeader';
 
 const allProjects = (await getCollection('projects')) as CollectionEntry<'projects'>[];
 const projects = allProjects
@@ -13,20 +13,20 @@ const cardVariants = ['lithography'] as const;
 ---
 
 <BaseLayout title="Projects | Ratish Gupta" description="Selected hardware projects and tapeout work.">
-  <PageHeader eyebrow="Index · Projects" title="Selected Work" lede="A focused archive of RTL, verification, and accelerator design projects." />
+  <PageHeader client:load kicker="Index · Projects" title="Selected Work" lede="A focused archive of RTL, verification, and accelerator design projects." back={{ to: '/', label: 'Back to Home' }} />
 
   <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 md:pb-40">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {projects.map((project, index) => (
         <a href={`/projects/${project.id}`} class={`project-card project-card--${cardVariants[index % cardVariants.length]} group border border-white/[0.08] bg-white/[0.015] hover:bg-white/[0.03] transition-colors duration-500 p-6 md:p-8 block`}>
           <div class="flex items-center justify-between gap-4 mb-5">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#706d65]">{project.data.category}</span>
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#706d65]">{project.data.status}</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#9a958c]">{project.data.category}</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#9a958c]">{project.data.status}</span>
           </div>
           <h2 class="font-serif text-[28px] md:text-[34px] text-[#ebe6dd] leading-[1.05] tracking-[-0.02em] mb-4 group-hover:text-white transition-colors">{project.data.title}</h2>
           <p class="font-serif text-[16px] text-[#a8a39a] leading-[1.75] mb-6">{project.data.summary}</p>
           <div class="flex flex-wrap gap-2">
-            {project.data.tags.map((tag: string) => <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#706d65] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>)}
+            {project.data.tags.map((tag: string) => <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#9a958c] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>)}
           </div>
         </a>
       ))}

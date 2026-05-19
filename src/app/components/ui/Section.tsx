@@ -7,7 +7,7 @@ export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
 
 export function Section({ className, children, ...props }: SectionProps) {
   return (
-    <section className={cn("w-full py-24 md:py-40 flex flex-col items-center justify-center relative", className)} {...props}>
+    <section className={cn("w-full py-24 md:py-40 scroll-mt-20 flex flex-col items-center justify-center relative", className)} {...props}>
       <div className="w-full max-w-[1200px] px-6 md:px-12 lg:px-16 flex flex-col relative z-10">
         {children}
       </div>
