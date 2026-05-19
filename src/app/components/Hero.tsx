@@ -5,120 +5,18 @@ import {
   useMotionValue,
   useSpring,
 } from "motion/react";
-import { useRef, useEffect, useCallback, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
-// --- Canvas Star Field ---
+// --- Static Star Field (baked into /public/starfield.svg)
+// Replaces the previous canvas-based animation; lost the twinkle/drift
+// but gained zero per-frame paint cost during scroll.
 function StarField() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>(0);
-  const starsRef = useRef<
-    { x: number; y: number; z: number; size: number; brightness: number }[]
-  >([]);
-
-  const initStars = useCallback((w: number, h: number) => {
-    const count = Math.floor((w * h) / 4000); // density based on viewport
-    starsRef.current = Array.from({ length: count }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      z: Math.random(), // depth 0-1 for parallax speed
-      size: Math.random() * 1.5 + 0.3,
-      brightness: Math.random() * 0.5 + 0.15,
-    }));
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio, 2);
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initStars(window.innerWidth, window.innerHeight);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    let time = 0;
-    let onScreen = true;
-    let tabVisible =
-      typeof document !== "undefined"
-        ? document.visibilityState !== "hidden"
-        : true;
-
-    const draw = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      ctx.clearRect(0, 0, w, h);
-      time += 0.0003;
-
-      for (const star of starsRef.current) {
-        // Gentle drift based on depth
-        const drift = time * (0.5 + star.z * 1.5) * 30;
-        const x = (star.x + drift) % w;
-        const y = star.y + Math.sin(time * 2 + star.x * 0.01) * 0.3;
-
-        // Subtle twinkle
-        const twinkle =
-          0.6 + 0.4 * Math.sin(time * 8 + star.x * 0.5 + star.y * 0.3);
-        const alpha = star.brightness * twinkle;
-
-        ctx.beginPath();
-        ctx.arc(x, y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(235, 230, 221, ${alpha})`;
-        ctx.fill();
-      }
-      animationRef.current = requestAnimationFrame(draw);
-    };
-
-    const start = () => {
-      if (animationRef.current === 0 && onScreen && tabVisible) {
-        animationRef.current = requestAnimationFrame(draw);
-      }
-    };
-    const stop = () => {
-      if (animationRef.current !== 0) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = 0;
-      }
-    };
-
-    const onVisibility = () => {
-      tabVisible = document.visibilityState !== "hidden";
-      if (tabVisible) start();
-      else stop();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        onScreen = entries[0]?.isIntersecting ?? false;
-        if (onScreen) start();
-        else stop();
-      },
-      { threshold: 0 },
-    );
-    io.observe(canvas);
-
-    start();
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      document.removeEventListener("visibilitychange", onVisibility);
-      io.disconnect();
-      stop();
-    };
-  }, [initStars]);
-
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 z-[1] pointer-events-none"
+    <img
+      src="/starfield.svg"
+      alt=""
+      aria-hidden="true"
+      className="absolute inset-0 z-[1] pointer-events-none w-full h-full object-cover"
     />
   );
 }
@@ -210,8 +108,6 @@ function FloatingPanel({
         <motion.img
           src={imgSrc}
           alt=""
-          decoding="async"
-          loading="lazy"
           className="w-full h-full object-cover"
           animate={{
             filter: hovered ? "grayscale(0%)" : "grayscale(100%)",
@@ -269,13 +165,9 @@ export function Hero() {
   const smoothMouseY = useSpring(mouseY, { damping: 50, stiffness: 100 });
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
     let rafId: number | null = null;
     let latestX = 0;
     let latestY = 0;
-    let attached = false;
 
     const update = () => {
       rafId = null;
@@ -291,34 +183,12 @@ export function Hero() {
       }
     };
 
-    const attach = () => {
-      if (attached) return;
-      window.addEventListener("mousemove", handleMouse, { passive: true });
-      attached = true;
-    };
-    const detach = () => {
-      if (!attached) return;
+    window.addEventListener("mousemove", handleMouse, { passive: true });
+    return () => {
       window.removeEventListener("mousemove", handleMouse);
-      attached = false;
       if (rafId !== null) {
         cancelAnimationFrame(rafId);
-        rafId = null;
       }
-    };
-
-    // Only listen to mousemove when the Hero is actually on-screen.
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) attach();
-        else detach();
-      },
-      { threshold: 0 },
-    );
-    io.observe(container);
-
-    return () => {
-      io.disconnect();
-      detach();
     };
   }, [mouseX, mouseY]);
 
@@ -345,14 +215,15 @@ export function Hero() {
         className="relative h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden bg-[#040405]"
       >
       {/* === LAYER 0: Deep background glow === */}
-      <motion.div style={{ y: bgScrollY }} className="absolute inset-0 z-0">
-        {/* Cosmic background image — rendered at 12% opacity so 1280w is plenty */}
+      <motion.div
+        style={{ y: bgScrollY, willChange: "transform" }}
+        className="absolute inset-0 z-0"
+      >
+        {/* Cosmic background image */}
         <img
-          src="https://images.unsplash.com/photo-1767188789485-54e0922d76a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY29zbW9zJTIwZGVlcCUyMHNwYWNlJTIwc3RhcnMlMjBuZWJ1bGF8ZW58MXx8fHwxNzcyOTA3MTE4fDA&ixlib=rb-4.1.0&q=75&w=1280"
+          src="https://images.unsplash.com/photo-1767188789485-54e0922d76a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY29zbW9zJTIwZGVlcCUyMHNwYWNlJTIwc3RhcnMlMjBuZWJ1bGF8ZW58MXx8fHwxNzcyOTA3MTE4fDA&ixlib=rb-4.1.0&q=80&w=1920"
           alt=""
-          decoding="async"
-          fetchPriority="high"
-          className="w-full h-[130%] object-cover opacity-[0.12] mix-blend-screen"
+          className="w-full h-[130%] object-cover opacity-[0.12]"
         />
         {/* Top / bottom fade to black */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#040405] via-transparent to-[#040405]" />
@@ -408,6 +279,7 @@ export function Hero() {
           y: textScrollY,
           opacity: textOpacity,
           x: driftX,
+          willChange: "transform, opacity",
         }}
         className="relative z-10 flex flex-col items-center text-center px-6 max-w-[960px] mx-auto"
       >
@@ -540,7 +412,7 @@ export function Hero() {
 
       {/* === Film grain overlay === */}
       <div
-        className="absolute inset-0 z-[15] pointer-events-none opacity-[0.035] mix-blend-overlay"
+        className="absolute inset-0 z-[15] pointer-events-none opacity-[0.035]"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
           backgroundSize: "128px 128px",
