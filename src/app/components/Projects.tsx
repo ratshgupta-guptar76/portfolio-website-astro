@@ -83,6 +83,8 @@ function ProjectCard({
           style={{ y: imgY, scale: 1.08 }}
           src={project.image}
           alt={project.title}
+          decoding="async"
+          loading="lazy"
           className="w-full h-full object-cover transition-all duration-[1.2s] ease-out opacity-70 grayscale group-hover:opacity-90 group-hover:grayscale-0"
         />
         <div className="absolute inset-0 bg-background/40 mix-blend-multiply group-hover:bg-transparent transition-all duration-700" />

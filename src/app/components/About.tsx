@@ -22,8 +22,10 @@ export function About() {
         >
           <div className="aspect-[3/4] relative border border-white/[0.06] overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1649649089599-59782dff8d04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaWxpY29uJTIwY2hpcCUyMG1hY3JvfGVufDF8fHx8MTc3MjkwNTU1MHww&ixlib=rb-4.1.0&q=80&w=800"
+              src="https://images.unsplash.com/photo-1649649089599-59782dff8d04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaWxpY29uJTIwY2hpcCUyMG1hY3JvfGVufDF8fHx8MTc3MjkwNTU1MHww&ixlib=rb-4.1.0&q=75&w=720"
               alt="Silicon architecture macro"
+              decoding="async"
+              loading="lazy"
               className="w-full h-full object-cover opacity-50 grayscale"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />

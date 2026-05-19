@@ -45,6 +45,12 @@ function StarField() {
     window.addEventListener("resize", resize);
 
     let time = 0;
+    let onScreen = true;
+    let tabVisible =
+      typeof document !== "undefined"
+        ? document.visibilityState !== "hidden"
+        : true;
+
     const draw = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
@@ -69,11 +75,43 @@ function StarField() {
       }
       animationRef.current = requestAnimationFrame(draw);
     };
-    draw();
+
+    const start = () => {
+      if (animationRef.current === 0 && onScreen && tabVisible) {
+        animationRef.current = requestAnimationFrame(draw);
+      }
+    };
+    const stop = () => {
+      if (animationRef.current !== 0) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = 0;
+      }
+    };
+
+    const onVisibility = () => {
+      tabVisible = document.visibilityState !== "hidden";
+      if (tabVisible) start();
+      else stop();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        onScreen = entries[0]?.isIntersecting ?? false;
+        if (onScreen) start();
+        else stop();
+      },
+      { threshold: 0 },
+    );
+    io.observe(canvas);
+
+    start();
 
     return () => {
       window.removeEventListener("resize", resize);
-      cancelAnimationFrame(animationRef.current);
+      document.removeEventListener("visibilitychange", onVisibility);
+      io.disconnect();
+      stop();
     };
   }, [initStars]);
 
@@ -172,6 +210,8 @@ function FloatingPanel({
         <motion.img
           src={imgSrc}
           alt=""
+          decoding="async"
+          loading="lazy"
           className="w-full h-full object-cover"
           animate={{
             filter: hovered ? "grayscale(0%)" : "grayscale(100%)",
@@ -229,9 +269,13 @@ export function Hero() {
   const smoothMouseY = useSpring(mouseY, { damping: 50, stiffness: 100 });
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
     let rafId: number | null = null;
     let latestX = 0;
     let latestY = 0;
+    let attached = false;
 
     const update = () => {
       rafId = null;
@@ -247,12 +291,34 @@ export function Hero() {
       }
     };
 
-    window.addEventListener("mousemove", handleMouse, { passive: true });
-    return () => {
+    const attach = () => {
+      if (attached) return;
+      window.addEventListener("mousemove", handleMouse, { passive: true });
+      attached = true;
+    };
+    const detach = () => {
+      if (!attached) return;
       window.removeEventListener("mousemove", handleMouse);
+      attached = false;
       if (rafId !== null) {
         cancelAnimationFrame(rafId);
+        rafId = null;
       }
+    };
+
+    // Only listen to mousemove when the Hero is actually on-screen.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) attach();
+        else detach();
+      },
+      { threshold: 0 },
+    );
+    io.observe(container);
+
+    return () => {
+      io.disconnect();
+      detach();
     };
   }, [mouseX, mouseY]);
 
@@ -280,10 +346,12 @@ export function Hero() {
       >
       {/* === LAYER 0: Deep background glow === */}
       <motion.div style={{ y: bgScrollY }} className="absolute inset-0 z-0">
-        {/* Cosmic background image */}
+        {/* Cosmic background image — rendered at 12% opacity so 1280w is plenty */}
         <img
-          src="https://images.unsplash.com/photo-1767188789485-54e0922d76a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY29zbW9zJTIwZGVlcCUyMHNwYWNlJTIwc3RhcnMlMjBuZWJ1bGF8ZW58MXx8fHwxNzcyOTA3MTE4fDA&ixlib=rb-4.1.0&q=80&w=1920"
+          src="https://images.unsplash.com/photo-1767188789485-54e0922d76a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY29zbW9zJTIwZGVlcCUyMHNwYWNlJTIwc3RhcnMlMjBuZWJ1bGF8ZW58MXx8fHwxNzcyOTA3MTE4fDA&ixlib=rb-4.1.0&q=75&w=1280"
           alt=""
+          decoding="async"
+          fetchPriority="high"
           className="w-full h-[130%] object-cover opacity-[0.12] mix-blend-screen"
         />
         {/* Top / bottom fade to black */}
