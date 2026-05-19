@@ -3,9 +3,9 @@ import { Section } from "./ui/Section";
 
 const DISCIPLINES = [
   { label: "RTL Design", detail: "SystemVerilog / Verilog" },
-  { label: "Architecture", detail: "RISC-V / Accelerators" },
-  { label: "Verification", detail: "UVM / Formal" },
-  { label: "Implementation", detail: "FPGA / ASIC Tapeout" },
+  { label: "Architecture", detail: "ML Accelerators / Systolic Arrays" },
+  { label: "Verification", detail: "cocotb / Verilator" },
+  { label: "Implementation", detail: "FPGA / Timing Closure" },
 ];
 
 export function About() {
@@ -31,7 +31,7 @@ export function About() {
             {/* Caption overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6">
               <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#706d65]">
-                Fig. 01 — Die photograph, custom accelerator
+                Fig. 01 — Cover image
               </span>
             </div>
           </div>
@@ -50,21 +50,23 @@ export function About() {
           </span>
 
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-primary leading-[1.2] tracking-tight mb-8">
-            Bridging conceptual architecture
+            Designing digital RTL,
             <br className="hidden md:block" />
-            and physical silicon.
+            end-to-end.
           </h2>
 
           <div className="font-sans text-[15px] text-muted-foreground leading-[1.8] space-y-5 max-w-lg">
             <p>
-              I specialize in the low-level implementation of digital systems —
-              high-performance accelerators, pipelined processor cores, and the
-              verification infrastructure required to ship them with confidence.
+              I'm a Computer Engineering undergraduate at McMaster focused on
+              digital RTL, hardware verification, and FPGA design. My current
+              work centres on ML hardware accelerators — most recently an 8×8
+              INT8 systolic MAC array, verified bit-exact against a NumPy
+              reference and closing timing at 100 MHz on Xilinx Artix-7.
             </p>
             <p>
-              My work spans computer architecture exploration, RTL design at
-              advanced process nodes, and the disciplined methodology that turns
-              architectural intent into timing-closed, fabrication-ready silicon.
+              Long-term, I'm aiming at graduate research in ML-accelerator
+              microarchitecture — the part of the stack where algorithms,
+              dataflow, and silicon constraints meet.
             </p>
           </div>
 
