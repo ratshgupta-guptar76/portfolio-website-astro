@@ -95,6 +95,7 @@ function FloatingPanel({
 
   return (
     <motion.div
+      // aria-hidden="true"
       className={`absolute hidden lg:block ${className}`}
       style={{ y: parallaxY }}
       initial={{ opacity: 0, scale: 0.95 }}
