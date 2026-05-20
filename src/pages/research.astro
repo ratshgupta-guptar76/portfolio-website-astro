@@ -3,25 +3,55 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { PageHeader } from '../app/components/ui/PageHeader';
 ---
 
-<BaseLayout title="Research | Ratish Gupta" description="Research interests and current reading — ML hardware acceleration, accelerator memory hierarchies, and verification methodology, with selected papers.">
-  <PageHeader client:load kicker="Research" title="Interests & Reading" lede="A working list of what I am thinking about, what I am reading, and what I do not yet know." back={{ to: '/', label: 'Back to Home' }} />
+<BaseLayout
+  title="Research | Ratish Gupta"
+  description="Active work — a compute-in-memory transformer accelerator on FPGA, the SSCS PICO Chipathon, and notes from ISSCC 2026."
+>
+  <PageHeader
+    client:load
+    kicker="Research"
+    title="Interests & Active Work"
+    lede="Where my attention is right now: what I'm building, what I'm reading toward, and the questions I want to take into graduate research."
+    back={{ to: '/', label: 'Back to Home' }}
+  />
   <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 md:pb-40">
     <div class="max-w-[68ch] flex flex-col gap-20">
       <div>
-        <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Current interests</h2>
+        <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Active work</h2>
         <ul class="flex flex-col gap-7 font-serif text-[16px] text-[#a8a39a] leading-[1.75]">
-          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">ML hardware acceleration.</span> Quantization-aware datapaths, sparsity-aware dispatch, and the architectural cost of supporting both dense and sparse workloads on the same fabric.</li>
-          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">Memory hierarchies for accelerators.</span> Bank-conflict avoidance, scratchpad vs. coherent caches, and the design of activation memory for systolic and dataflow engines.</li>
-          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">Verification methodology.</span> Formal property decomposition, coverage models that survive scope creep, and the ergonomics of scaling UVM across multi-tape-out programs.</li>
+          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">Compute-in-memory transformer accelerator.</span> Self-directed capstone on FPGA, sequenced as seven milestones. M1 — an 8×8 INT8 output-stationary systolic MAC array — is verified bit-exact against a NumPy reference and closes timing at 100 MHz on Xilinx Artix-7. Subsequent milestones extend toward a full transformer datapath with attention and FFN blocks.</li>
+          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">SSCS PICO Chipathon.</span> Currently participating, aiming to build and submit a digital compute-in-memory design. Strong submissions earn the opportunity to publish through the IEEE Solid-State Circuits Society as an open-source design.</li>
         </ul>
       </div>
+
       <div>
-        <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Selected reading</h2>
+        <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Conferences</h2>
+        <ul class="flex flex-col gap-7 font-serif text-[16px] text-[#a8a39a] leading-[1.75]">
+          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">IEEE ISSCC 2026 — San Francisco.</span> Attended in person. Spent most of my time in the AI-accelerator and compute-in-memory sessions, and had conversations with engineers from Qualcomm, IBM, Samsung, Synopsys, and GSMC. The biggest takeaway: a large share of published work is bottlenecked by analog periphery and on-chip memory, not the compute fabric itself.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Heading toward</h2>
+        <p class="font-serif text-[16px] text-[#a8a39a] leading-[1.75]">Graduate research in <span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">ML-accelerator microarchitecture</span> — the boundary between algorithm intent, dataflow design, and the physical constraints of silicon. Specific questions I want to pursue:</p>
+        <ul class="flex flex-col gap-4 font-serif text-[16px] text-[#a8a39a] leading-[1.75] mt-6 list-disc pl-6 marker:text-[#7a766e]">
+          <li>Quantization-aware datapaths with sparsity-aware dispatch, and the architectural cost of supporting both dense and sparse workloads on the same fabric.</li>
+          <li>Compute-in-memory beyond the demo — how the periphery (drivers, ADCs, accumulators) actually limits realistic workloads.</li>
+          <li>Memory hierarchies for accelerators — bank-conflict avoidance, and the scratchpad-vs-coherent-cache trade-off for systolic and dataflow engines.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Reading</h2>
         <ol class="flex flex-col gap-8 list-decimal pl-6 marker:font-mono marker:text-[#7a766e] marker:text-[12px]">
-          <li class="pl-2"><p class="font-serif text-[16px] text-[#cfc9bf] leading-[1.7]"><span class="text-[#ebe6dd]">Jouppi, N. P. et al.</span> <em class="text-[#ebe6dd]">In-datacenter performance analysis of a Tensor Processing Unit</em>. <span class="text-[#8a8680]">ISCA, 2017.</span></p><p class="font-serif text-[14px] text-[#9a958c] italic leading-[1.7] mt-2">Still the cleanest published account of weight-stationary systolic design at scale. Read the area breakdown carefully.</p></li>
-          <li class="pl-2"><p class="font-serif text-[16px] text-[#cfc9bf] leading-[1.7]"><span class="text-[#ebe6dd]">Chen, Y.-H., Krishna, T., Emer, J., Sze, V.</span> <em class="text-[#ebe6dd]">Eyeriss: A spatial architecture for energy-efficient dataflow for CNNs</em>. <span class="text-[#8a8680]">ISSCC, 2016.</span></p><p class="font-serif text-[14px] text-[#9a958c] italic leading-[1.7] mt-2">The argument for row-stationary dataflow as an energy-first design. Pair with the journal extension for the modeling.</p></li>
-          <li class="pl-2"><p class="font-serif text-[16px] text-[#cfc9bf] leading-[1.7]"><span class="text-[#ebe6dd]">Mutlu, O.</span> <em class="text-[#ebe6dd]">Memory systems and memory-centric computing</em>. <span class="text-[#8a8680]">Lecture series, ETH Zürich, 2023.</span></p><p class="font-serif text-[14px] text-[#9a958c] italic leading-[1.7] mt-2">The framing of "the memory wall as a budget" is what most architectural papers are implicitly arguing about.</p></li>
-          <li class="pl-2"><p class="font-serif text-[16px] text-[#cfc9bf] leading-[1.7]"><span class="text-[#ebe6dd]">Patterson, D. A. &amp; Hennessy, J. L.</span> <em class="text-[#ebe6dd]">Computer Architecture: A Quantitative Approach</em>. <span class="text-[#8a8680]">Morgan Kaufmann, 6th ed., 2017.</span></p><p class="font-serif text-[14px] text-[#9a958c] italic leading-[1.7] mt-2">The reference, not the textbook. Chapter 5 on memory hierarchy is worth annual re-reading.</p></li>
+          <li class="pl-2">
+            <p class="font-serif text-[16px] text-[#cfc9bf] leading-[1.7]">
+              <span class="text-[#ebe6dd]">Spear, C. &amp; Tumbush, G.</span>
+              <em class="text-[#ebe6dd]">SystemVerilog for Verification</em>.
+              <span class="text-[#8a8680]">Springer, 3rd ed., 2012.</span>
+            </p>
+            <p class="font-serif text-[14px] text-[#9a958c] italic leading-[1.7] mt-2">Most of my verification flow is cocotb in Python — this is the SystemVerilog-side context I'm filling in. SVA, randomization, coverage, and the constructs that don't naturally show up through a Python harness.</p>
+          </li>
         </ol>
       </div>
     </div>
