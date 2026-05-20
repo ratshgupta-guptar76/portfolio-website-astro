@@ -106,9 +106,9 @@ export function Experience() {
                       delay: index * 0.1 + 0.2,
                     }}
                   >
-                    <h4 className="text-lg md:text-xl font-serif text-primary leading-tight">
+                    <h3 className="text-lg md:text-xl font-serif text-primary leading-tight">
                       {exp.role}
-                    </h4>
+                    </h3>
                     <div className="mt-1.5 flex flex-wrap items-baseline gap-x-2">
                       <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#b08d57]">
                         {exp.company}

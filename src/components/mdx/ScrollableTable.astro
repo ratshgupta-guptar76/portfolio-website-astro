@@ -1,0 +1,10 @@
+---
+// Wraps any MDX-rendered <table> in a horizontally-scrollable container so
+// the prose body doesn't overflow the viewport on narrow screens. The inner
+// <table> keeps full table semantics for accessibility and styling.
+---
+<div class="overflow-x-auto -mx-2 px-2">
+  <table>
+    <slot />
+  </table>
+</div>

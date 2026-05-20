@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PageHeader } from '../app/components/ui/PageHeader';
+---
+
+<BaseLayout
+  title="Not Found — Ratish Gupta"
+  description="The page you're looking for doesn't exist. Head back to the home page, the projects archive, or the writing index."
+>
+  <PageHeader
+    client:load
+    kicker="Error · 404"
+    title="Page not found"
+    lede="The link you followed is broken, the page has been moved, or it never existed. Pick a destination below."
+  />
+
+  <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 md:pb-40">
+    <div class="max-w-[68ch] flex flex-col gap-4 border-t border-white/[0.06] pt-8">
+      <a
+        href="/"
+        class="group flex items-baseline justify-between gap-6 py-4 border-b border-white/[0.05] hover:border-white/15 transition-colors"
+      >
+        <div>
+          <h2 class="font-serif text-[20px] text-[#ebe6dd] leading-tight">Home</h2>
+          <p class="font-sans text-[14px] text-[#9a958c] mt-1">Selected work, current direction, and writing.</p>
+        </div>
+        <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#7a766e] group-hover:text-[#ebe6dd] transition-colors">→</span>
+      </a>
+      <a
+        href="/projects"
+        class="group flex items-baseline justify-between gap-6 py-4 border-b border-white/[0.05] hover:border-white/15 transition-colors"
+      >
+        <div>
+          <h2 class="font-serif text-[20px] text-[#ebe6dd] leading-tight">Projects</h2>
+          <p class="font-sans text-[14px] text-[#9a958c] mt-1">RTL, verification, and embedded projects with full write-ups.</p>
+        </div>
+        <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#7a766e] group-hover:text-[#ebe6dd] transition-colors">→</span>
+      </a>
+      <a
+        href="/blog"
+        class="group flex items-baseline justify-between gap-6 py-4 border-b border-white/[0.05] hover:border-white/15 transition-colors"
+      >
+        <div>
+          <h2 class="font-serif text-[20px] text-[#ebe6dd] leading-tight">Writing</h2>
+          <p class="font-sans text-[14px] text-[#9a958c] mt-1">Notes on hardware, neurology, and what's caught my attention.</p>
+        </div>
+        <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#7a766e] group-hover:text-[#ebe6dd] transition-colors">→</span>
+      </a>
+      <a
+        href="/contact"
+        class="group flex items-baseline justify-between gap-6 py-4 border-b border-white/[0.05] hover:border-white/15 transition-colors"
+      >
+        <div>
+          <h2 class="font-serif text-[20px] text-[#ebe6dd] leading-tight">Contact</h2>
+          <p class="font-sans text-[14px] text-[#9a958c] mt-1">Email, GitHub, LinkedIn, and Medium.</p>
+        </div>
+        <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#7a766e] group-hover:text-[#ebe6dd] transition-colors">→</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
