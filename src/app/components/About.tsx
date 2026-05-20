@@ -59,16 +59,18 @@ export function About() {
 
           <div className="font-sans text-[15px] text-muted-foreground leading-[1.8] space-y-5 max-w-lg">
             <p>
-              I'm a Computer Engineering undergraduate at McMaster focused on
-              digital RTL, hardware verification, and FPGA design. My current
-              work centres on ML hardware accelerators — most recently an 8×8
-              INT8 systolic MAC array, verified bit-exact against a NumPy
-              reference and closing timing at 100 MHz on Xilinx Artix-7.
+              I'm a Computer Engineering undergrad at McMaster. Most of my
+              work is digital RTL and hardware verification on FPGA, with a
+              focus on ML hardware accelerators. The most recent piece I've
+              finished is an 8×8 INT8 systolic MAC array. It verifies
+              bit-exact against a NumPy reference and closes timing at 100
+              MHz on Artix-7.
             </p>
             <p>
-              Long-term, I'm aiming at graduate research in ML-accelerator
-              microarchitecture — the part of the stack where algorithms,
-              dataflow, and silicon constraints meet.
+              After undergrad I want to do research on ML-accelerator
+              microarchitecture. It sits between the algorithm choices and
+              the silicon you can actually build, and that interface is the
+              part of the field I find most interesting.
             </p>
           </div>
 

@@ -11,7 +11,7 @@ import { PageHeader } from '../app/components/ui/PageHeader';
     client:load
     kicker="Research"
     title="Interests & Active Work"
-    lede="Where my attention is right now: what I'm building, what I'm reading toward, and the questions I want to take into graduate research."
+    lede="Notes on what I'm working on, what's caught my eye lately, and where I want this to go."
     back={{ to: '/', label: 'Back to Home' }}
   />
   <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 md:pb-40">
@@ -19,25 +19,25 @@ import { PageHeader } from '../app/components/ui/PageHeader';
       <div>
         <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Active work</h2>
         <ul class="flex flex-col gap-7 font-serif text-[16px] text-[#a8a39a] leading-[1.75]">
-          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">Compute-in-memory transformer accelerator.</span> Self-directed capstone on FPGA, sequenced as seven milestones. M1 — an 8×8 INT8 output-stationary systolic MAC array — is verified bit-exact against a NumPy reference and closes timing at 100 MHz on Xilinx Artix-7. Subsequent milestones extend toward a full transformer datapath with attention and FFN blocks.</li>
-          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">SSCS PICO Chipathon.</span> Currently participating, aiming to build and submit a digital compute-in-memory design. Strong submissions earn the opportunity to publish through the IEEE Solid-State Circuits Society as an open-source design.</li>
+          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">Compute-in-memory transformer accelerator.</span> A self-directed FPGA capstone that I'm building in seven milestones. The first is an 8×8 INT8 output-stationary systolic MAC array. It verifies bit-exact against a NumPy reference and closes timing at 100 MHz on Xilinx Artix-7. The next milestones extend that into a full transformer datapath with attention and FFN blocks.</li>
+          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">SSCS PICO Chipathon.</span> I'm in the current cohort, planning to submit a digital compute-in-memory design. The top submissions get the chance to be published as open-source designs by the IEEE Solid-State Circuits Society, which is what I'm aiming at.</li>
         </ul>
       </div>
 
       <div>
         <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Conferences</h2>
         <ul class="flex flex-col gap-7 font-serif text-[16px] text-[#a8a39a] leading-[1.75]">
-          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">IEEE ISSCC 2026 — San Francisco.</span> Attended in person. Spent most of my time in the AI-accelerator and compute-in-memory sessions, and had conversations with engineers from Qualcomm, IBM, Samsung, Synopsys, and GSMC. The biggest takeaway: a large share of published work is bottlenecked by analog periphery and on-chip memory, not the compute fabric itself.</li>
+          <li><span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">IEEE ISSCC 2026, San Francisco.</span> I went in person and spent most of the time in the AI-accelerator and compute-in-memory sessions. I also got to talk with engineers from Qualcomm, IBM, Samsung, Synopsys, and GSMC. The thing that stuck with me was how much of the published work is bottlenecked by analog periphery and on-chip memory rather than by the compute fabric itself.</li>
         </ul>
       </div>
 
       <div>
         <h2 class="font-sans text-[22px] text-[#ebe6dd] tracking-[-0.01em] pb-4 mb-8 border-b border-white/[0.08]">Heading toward</h2>
-        <p class="font-serif text-[16px] text-[#a8a39a] leading-[1.75]">Graduate research in <span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">ML-accelerator microarchitecture</span> — the boundary between algorithm intent, dataflow design, and the physical constraints of silicon. Specific questions I want to pursue:</p>
+        <p class="font-serif text-[16px] text-[#a8a39a] leading-[1.75]">After undergrad I'd like to go into research on <span class="font-sans text-[#ebe6dd] font-medium tracking-[-0.005em]">ML-accelerator microarchitecture</span>. It sits between what an algorithm wants to do and what silicon will actually let you build, and I find that pull-and-tension the most interesting part of the field. Some of the specific questions I'm chasing:</p>
         <ul class="flex flex-col gap-4 font-serif text-[16px] text-[#a8a39a] leading-[1.75] mt-6 list-disc pl-6 marker:text-[#7a766e]">
-          <li>Quantization-aware datapaths with sparsity-aware dispatch, and the architectural cost of supporting both dense and sparse workloads on the same fabric.</li>
-          <li>Compute-in-memory beyond the demo — how the periphery (drivers, ADCs, accumulators) actually limits realistic workloads.</li>
-          <li>Memory hierarchies for accelerators — bank-conflict avoidance, and the scratchpad-vs-coherent-cache trade-off for systolic and dataflow engines.</li>
+          <li>Quantization-aware datapaths and sparsity-aware dispatch. What's the architectural cost of supporting both dense and sparse workloads on the same fabric?</li>
+          <li>Compute-in-memory beyond the demo. The compute fabric itself is the easier part; what really limits realistic workloads is the periphery (drivers, ADCs, accumulators).</li>
+          <li>Memory hierarchies for accelerators. Bank-conflict avoidance, and the scratchpad-versus-coherent-cache trade-off for systolic and dataflow engines.</li>
         </ul>
       </div>
 
@@ -50,7 +50,7 @@ import { PageHeader } from '../app/components/ui/PageHeader';
               <em class="text-[#ebe6dd]">SystemVerilog for Verification</em>.
               <span class="text-[#8a8680]">Springer, 3rd ed., 2012.</span>
             </p>
-            <p class="font-serif text-[14px] text-[#9a958c] italic leading-[1.7] mt-2">Most of my verification flow is cocotb in Python — this is the SystemVerilog-side context I'm filling in. SVA, randomization, coverage, and the constructs that don't naturally show up through a Python harness.</p>
+            <p class="font-serif text-[14px] text-[#9a958c] italic leading-[1.7] mt-2">Most of my verification flow is cocotb in Python, so this book is filling in the SystemVerilog side. The SVA, randomization, and coverage features don't really translate cleanly into a Python harness, and I want to be fluent in both.</p>
           </li>
         </ol>
       </div>

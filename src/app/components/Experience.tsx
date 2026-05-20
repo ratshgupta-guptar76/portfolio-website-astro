@@ -9,9 +9,9 @@ const EXPERIENCE = [
     location: "Hamilton, ON",
     period: "Sep 2025 — Apr 2026",
     bullets: [
-      "Researched and wrote articles on AI, healthcare, and emerging medical technology for a youth-focused platform.",
-      "Translated technical concepts into clear, engaging content for non-technical audiences.",
-      "Strengthened written communication and technical reasoning through editorial review cycles.",
+      "Wrote articles on AI, healthcare, and new medical tech for a youth-focused publication.",
+      "Took dense technical material and rewrote it for readers who weren't trained engineers.",
+      "Most of the actual writing got better in the editorial back-and-forth, not in the first draft.",
     ],
   },
   {
@@ -21,9 +21,9 @@ const EXPERIENCE = [
     location: "Toronto, ON",
     period: "May 2025 — Aug 2025",
     bullets: [
-      "Developed and validated backend microservices with an emphasis on correctness, structured testing, and failure-mode analysis.",
-      "Designed automated test frameworks that raised regression coverage to 80%+ and added edge-case validation across distribution services.",
-      "Performed root-cause debugging across distributed systems while collaborating with cross-functional teams under production deadlines.",
+      "Built and tested backend microservices. The brief was correctness over speed, with careful attention to what happens when a service partially fails.",
+      "Wrote the automated test scaffolding for a couple of distribution services. Coverage went from the low 60s to above 80%, mostly by catching the edge cases the original tests skipped.",
+      "Did a lot of debugging across services where the failure was rarely in the obvious place. Made me much more patient about reading logs.",
     ],
   },
   {
@@ -33,8 +33,8 @@ const EXPERIENCE = [
     location: "Hamilton, ON",
     period: "Sep 2023",
     bullets: [
-      "Ran activities and acted as an event ambassador, interacting with attendees throughout the day.",
-      "Provided live-feed captions to improve event accessibility.",
+      "Ran activities for attendees throughout the day.",
+      "Captioned the live feed so the event was accessible to people who couldn't hear it.",
     ],
   },
 ];

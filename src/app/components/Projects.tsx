@@ -10,7 +10,7 @@ const PROJECTS = [
     title: "INT8 Systolic MAC Array",
     category: "FPGA / Architecture",
     description:
-      "Parameterized 8×8 output-stationary INT8/INT32 systolic MAC array in SystemVerilog for transformer Q/K/V/O and FFN matmuls. Closed timing at 100 MHz with +3.76 ns slack on Xilinx Artix-7, peak 12.8 GOPS at 100 MHz, 64 DSP48E1 slices.",
+      "Parameterized 8×8 output-stationary INT8/INT32 systolic MAC array in SystemVerilog. Designed for transformer Q/K/V/O and FFN matmuls. Closes timing at 100 MHz on Artix-7 with +3.76 ns slack, 64 DSP48E1 slices, peak 12.8 GOPS.",
     image:
       "https://images.unsplash.com/photo-1768527858342-037cff722276?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMGdyaWQlMjBkYXJrfGVufDF8fHx8MTc3MjkwNTU1MXww&ixlib=rb-4.1.0&q=80&w=1080",
     tags: ["SystemVerilog", "Vivado", "cocotb", "Verilator"],
@@ -21,7 +21,7 @@ const PROJECTS = [
     title: "Real-Time FM Software-Defined Radio",
     category: "DSP / Embedded",
     description:
-      "Real-time FM SDR on Raspberry Pi 4 recovering mono audio, stereo audio, and RDS metadata from RF input. Three-thread producer-consumer pipeline with polyphase resampling — 1.4× speedup, holds real time at 600 MHz, 101 taps, no underrun over 5 minutes.",
+      "Real-time FM SDR on Raspberry Pi 4. Recovers mono audio, stereo audio, and RDS metadata from RF input through a three-thread producer-consumer pipeline with polyphase resampling. The polyphase rewrite was a 1.4× speedup over the naive version. Holds real-time at 600 MHz, 101 taps, no underruns over five minutes.",
     image:
       "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwZGFyayUyMGxpZ2h0c3xlbnwxfHx8fDE3NzI5MDU1NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
     tags: ["C++17", "Python", "DSP", "Raspberry Pi"],
@@ -32,7 +32,7 @@ const PROJECTS = [
     title: "RTL Image Decompression Pipeline",
     category: "FPGA / RTL",
     description:
-      "JPEG-style FPGA image decoder on Altera DE1-SoC at 50 MHz. Chroma upsampling, YCbCr→RGB conversion, and 2-D inverse DCT across ~2,600 lines of SystemVerilog. Four hardware-multiplexed multipliers feed 6 outputs per pixel pair; dual-port RAM hides the IDCT transpose.",
+      "JPEG-style FPGA image decoder on the Altera DE1-SoC at 50 MHz. Around 2,600 lines of SystemVerilog. The pipeline does chroma upsampling, then YCbCr→RGB, then a 2-D inverse DCT. Four hardware-multiplexed multipliers feed six outputs per pixel pair, and a dual-port RAM hides the IDCT transpose.",
     image:
       "https://images.unsplash.com/photo-1698714260145-7b4f36737f33?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwaGFyZHdhcmUlMjB0ZXJtaW5hbHxlbnwxfHx8fDE3NzI5MDU1NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
     tags: ["SystemVerilog", "Quartus", "ModelSim", "DE1-SoC"],
@@ -43,7 +43,7 @@ const PROJECTS = [
     title: "ToF 3D Room Scanner",
     category: "Embedded / Sensor Fusion",
     description:
-      "Tabletop room scanner — TI Tiva C (Cortex-M4F) drives a stepper motor and an ST VL53L1X time-of-flight sensor in a coordinated sweep. 128 angular samples per revolution across 50 vertical planes, streamed as CSV over UART, then rendered as a 3D wireframe in Open3D.",
+      "Tabletop room scanner. A TI Tiva C (Cortex-M4F) coordinates a stepper motor and an ST VL53L1X time-of-flight sensor through a sweep. The MCU takes 128 angular samples per revolution across 50 vertical planes, streams them out as CSV over UART, and a Python host renders the result as a 3D wireframe in Open3D.",
     image:
       "https://images.unsplash.com/photo-1656510922456-e9018507288f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8M2QlMjBtZXNofGVufDB8fDB8fHww",
     tags: ["ARM Cortex-M", "Bare-Metal C", "I²C", "Open3D"],

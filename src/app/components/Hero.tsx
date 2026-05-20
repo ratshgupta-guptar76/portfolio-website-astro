@@ -376,9 +376,9 @@ export function Hero() {
           transition={{ duration: 1.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
           className="mt-8 text-[15px] md:text-[17px] text-[#8a8680] font-sans font-normal leading-[1.7] max-w-[480px] tracking-[0.01em]"
         >
-          RTL design and verification on FPGA —
-          <br className="hidden md:block" /> heading toward graduate research
-          in ML-accelerator microarchitecture.
+          RTL design and verification on FPGA.
+          <br className="hidden md:block" /> Aiming for graduate research in
+          ML-accelerator microarchitecture.
         </motion.p>
 
         {/* Scroll indicator */}
