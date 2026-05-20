@@ -1,0 +1,14 @@
+---
+// MDX `<a>` override. For any href that points off-site (starts with http:// or
+// https://), add target="_blank" rel="noopener noreferrer" so we don't:
+//   - leak window.opener references back to the new tab
+//   - leak the referrer to third-party sites unnecessarily
+// Internal links (relative paths, anchors, mailto:) pass through untouched.
+const { href, ...rest } = Astro.props;
+const isExternal = typeof href === 'string' && /^https?:\/\//.test(href);
+---
+{isExternal ? (
+  <a href={href} target="_blank" rel="noopener noreferrer" {...rest}><slot /></a>
+) : (
+  <a href={href} {...rest}><slot /></a>
+)}

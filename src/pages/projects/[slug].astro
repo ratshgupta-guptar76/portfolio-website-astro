@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { PageHeader } from '../../app/components/ui/PageHeader';
 import { getCollection, render } from 'astro:content';
 import ScrollableTable from '../../components/mdx/ScrollableTable.astro';
+import Link from '../../components/mdx/Link.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ data }) => !data.draft);
@@ -13,7 +14,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const data = entry.data;
 
-const mdxComponents = { table: ScrollableTable };
+const mdxComponents = { table: ScrollableTable, a: Link };
 
 const dateFmt = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' });
 const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
@@ -31,7 +32,7 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
           <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Status</span><div class="font-sans text-[13px] text-[#ebe6dd]/80">{data.status}</div></div>
           <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Stack</span><ul class="flex flex-col gap-1 font-mono text-[12px] text-[#ebe6dd]/70">{data.stack.map((s) => <li>{s}</li>)}</ul></div>
           <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Tags</span><div class="flex flex-wrap gap-1.5">{data.tags.map((tag) => <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#9a958c] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>)}</div></div>
-          {data.source ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Source</span><a href={data.source.startsWith('http') ? data.source : `https://${data.source}`} class="font-mono text-[12px] text-[#ebe6dd]/70 hover:text-[#ebe6dd] transition-colors break-all">{data.source}</a></div> : null}
+          {data.source ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Source</span><a href={data.source.startsWith('http') ? data.source : `https://${data.source}`} target="_blank" rel="noopener noreferrer" class="font-mono text-[12px] text-[#ebe6dd]/70 hover:text-[#ebe6dd] transition-colors break-all">{data.source}</a></div> : null}
           {data.paper ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Paper</span><span class="font-mono text-[12px] text-[#ebe6dd]/70">{data.paper}</span></div> : null}
         </div>
       </aside>
@@ -43,7 +44,7 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
               <tbody>
                 {data.results.map((result) => (
                   <tr class="border-b border-white/[0.05] last:border-b-0">
-                    <th class="text-left font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em] w-1/2">{result.label}</th>
+                    <th scope="row" class="text-left font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em] w-1/2">{result.label}</th>
                     <td class="py-3 px-4 text-[#ebe6dd]/85 text-right">{result.value}</td>
                   </tr>
                 ))}
@@ -63,10 +64,10 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
               <table class="w-full font-mono text-[13px]" style="font-variant-numeric: tabular-nums;">
                 <thead>
                   <tr class="border-b border-white/[0.08]">
-                    <th class="text-left font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Stage</th>
-                    <th class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Frequency</th>
-                    <th class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Slack</th>
-                    <th class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Area</th>
+                    <th scope="col" class="text-left font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Stage</th>
+                    <th scope="col" class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Frequency</th>
+                    <th scope="col" class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Slack</th>
+                    <th scope="col" class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Area</th>
                   </tr>
                 </thead>
                 <tbody>
