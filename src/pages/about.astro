@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHeader from '../components/astro/PageHeader.astro';
+import { PageHeader } from '../app/components/ui/PageHeader';
 
 const disciplines = [
   { label: 'HDL & RTL',      detail: 'SystemVerilog, Verilog, FSM design, datapath & control logic' },
@@ -16,7 +16,7 @@ const disciplines = [
   title="About — Ratish Gupta"
   description="Computer Engineering at McMaster University. RTL design, FPGA verification, and ML hardware acceleration."
 >
-  <PageHeader eyebrow="04 / About" title="Ratish Gupta" />
+  <PageHeader client:load kicker="About" title="Ratish Gupta" back={{ to: '/', label: 'Back to Home' }} />
 
   <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 grid md:grid-cols-2 gap-12 border-t border-white/[0.06] pt-12">
     <div class="space-y-6">

@@ -95,6 +95,7 @@ function FloatingPanel({
 
   return (
     <motion.div
+      // aria-hidden="true"
       className={`absolute hidden lg:block ${className}`}
       style={{ y: parallaxY }}
       initial={{ opacity: 0, scale: 0.95 }}
@@ -329,15 +330,15 @@ export function Hero() {
           transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-center gap-4 mb-12"
         >
-          <span className="w-8 h-px bg-[#706d65]/40" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.45em] text-[#706d65]">
+          <span className="w-8 h-px bg-[#9a958c]/40" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.45em] text-[#9a958c]">
             RTL Design
           </span>
-          <span className="inline-block w-1 h-1 bg-[#706d65]/50 rounded-full" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.45em] text-[#706d65]">
+          <span className="inline-block w-1 h-1 bg-[#9a958c]/50 rounded-full" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.45em] text-[#9a958c]">
             Hardware Verification
           </span>
-          <span className="w-8 h-px bg-[#706d65]/40" />
+          <span className="w-8 h-px bg-[#9a958c]/40" />
         </motion.div>
 
         {/* Main title */}
@@ -349,7 +350,7 @@ export function Hero() {
         >
           <span className="block">Silicon Systems</span>
           <span className="block mt-1">
-            <span className="text-[#5a5750] italic font-normal text-[0.85em]">
+            <span className="text-[#7a766e] italic font-normal text-[0.85em]">
               &amp;
             </span>{" "}
             Architecture
@@ -363,9 +364,9 @@ export function Hero() {
           animate={{ opacity: 1, scaleX: 1 }}
           transition={{ duration: 1.2, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="w-12 h-px bg-gradient-to-r from-transparent to-[#706d65]/30" />
-          <span className="w-1.5 h-1.5 border border-[#706d65]/30 rotate-45" />
-          <span className="w-12 h-px bg-gradient-to-l from-transparent to-[#706d65]/30" />
+          <span className="w-12 h-px bg-gradient-to-r from-transparent to-[#9a958c]/30" />
+          <span className="w-1.5 h-1.5 border border-[#9a958c]/30 rotate-45" />
+          <span className="w-12 h-px bg-gradient-to-l from-transparent to-[#9a958c]/30" />
         </motion.div>
 
         {/* Subtitle */}
@@ -373,7 +374,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-8 text-[15px] md:text-[17px] text-[#8a8680] font-sans font-light leading-[1.7] max-w-[480px] tracking-[0.01em]"
+          className="mt-8 text-[15px] md:text-[17px] text-[#8a8680] font-sans font-normal leading-[1.7] max-w-[480px] tracking-[0.01em]"
         >
           RTL design and verification on FPGA —
           <br className="hidden md:block" /> heading toward graduate research
@@ -388,12 +389,12 @@ export function Hero() {
           transition={{ duration: 1, delay: 1.6 }}
           className="mt-20 group flex flex-col items-center gap-3 cursor-pointer"
         >
-          <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#5a5750] group-hover:text-[#ebe6dd]/60 transition-colors duration-700">
+          <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#7a766e] group-hover:text-[#ebe6dd]/60 transition-colors duration-700">
             Begin
           </span>
           <div className="w-px h-10 bg-white/[0.06] relative overflow-hidden">
             <motion.div
-              className="absolute inset-x-0 top-0 bg-[#706d65]/60 group-hover:bg-[#ebe6dd]/40 transition-colors duration-700"
+              className="absolute inset-x-0 top-0 bg-[#9a958c]/60 group-hover:bg-[#ebe6dd]/40 transition-colors duration-700"
               animate={{
                 height: ["0%", "100%"],
                 opacity: [0, 1, 1, 0],

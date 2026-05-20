@@ -13,19 +13,23 @@ const { Content } = await render(entry);
 const data = entry.data;
 
 const dateFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+
+const titleCase = (s: string) => s.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+const primaryTag = data.tags[0] ? titleCase(data.tags[0]) : 'Note';
+const kicker = data.tags[0] ? `Note · ${primaryTag}` : 'Note';
 ---
 
 <BaseLayout title={`${data.title} | Ratish Gupta`} description={data.lede}>
-  <PageHeader client:load kicker="Note" title={data.title} lede={data.lede} back={{ to: '/blog', label: 'All Notes' }} />
+  <PageHeader client:load kicker={kicker} title={data.title} lede={data.lede} back={{ to: '/blog', label: 'All Notes' }} />
 
   <section class="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pb-24 md:pb-40">
     <article class="max-w-[68ch]">
       <div class="flex flex-wrap items-center gap-4 pb-6 mb-12 border-b border-white/[0.08]">
-        <span class="font-mono text-[11px] tracking-[0.1em] text-[#706d65]">{dateFmt.format(data.date)}</span>
-        {data.updated ? <><span class="text-[#3f3d38]">·</span><span class="font-mono text-[11px] tracking-[0.1em] text-[#706d65]">Updated {dateFmt.format(data.updated)}</span></> : null}
+        <span class="font-mono text-[11px] tracking-[0.1em] text-[#9a958c]">{dateFmt.format(data.date)}</span>
+        {data.updated ? <><span class="text-[#3f3d38]">·</span><span class="font-mono text-[11px] tracking-[0.1em] text-[#9a958c]">Updated {dateFmt.format(data.updated)}</span></> : null}
         <div class="flex flex-wrap gap-1.5 ml-auto">
           {data.tags.map((tag) => (
-            <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#706d65] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>
+            <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#9a958c] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>
           ))}
         </div>
       </div>
@@ -36,7 +40,7 @@ const dateFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit
 
       {data.references.length > 0 && (
         <div class="mt-16 pt-8 border-t border-white/[0.08]">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#706d65] mb-4 block">References</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#9a958c] mb-4 block">References</span>
           <ol class="font-sans text-[13px] text-[#8a8680] leading-[1.7] space-y-2 list-decimal pl-5">
             {data.references.map((reference) => <li>{reference}</li>)}
           </ol>
@@ -44,8 +48,8 @@ const dateFmt = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit
       )}
 
       <div class="mt-16 pt-8 border-t border-white/[0.08] flex items-center justify-between">
-        <a href="/blog" class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#706d65] hover:text-[#ebe6dd] transition-colors">← All Notes</a>
-        <a href="/contact" class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#706d65] hover:text-[#ebe6dd] transition-colors">Send a reply →</a>
+        <a href="/blog" class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#9a958c] hover:text-[#ebe6dd] transition-colors">← All Notes</a>
+        <a href="/contact" class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#9a958c] hover:text-[#ebe6dd] transition-colors">Get in touch →</a>
       </div>
     </article>
   </section>

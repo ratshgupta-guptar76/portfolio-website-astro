@@ -23,13 +23,13 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
     <div class="grid grid-cols-1 lg:grid-cols-[14rem_1fr] gap-12 lg:gap-20">
       <aside class="lg:sticky lg:top-28 lg:self-start">
         <div class="flex flex-row lg:flex-col flex-wrap gap-x-10 gap-y-7 pb-6 border-b lg:border-b-0 border-white/[0.06]">
-          <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#5a5750]">Date</span><div class="font-sans text-[13px] text-[#ebe6dd]/80">{fmtDate(data.date)}</div></div>
-          {data.updated ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#5a5750]">Updated</span><div class="font-sans text-[13px] text-[#ebe6dd]/80">{fmtDate(data.updated)}</div></div> : null}
-          <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#5a5750]">Status</span><div class="font-sans text-[13px] text-[#ebe6dd]/80">{data.status}</div></div>
-          <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#5a5750]">Stack</span><ul class="flex flex-col gap-1 font-mono text-[12px] text-[#ebe6dd]/70">{data.stack.map((s) => <li>{s}</li>)}</ul></div>
-          <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#5a5750]">Tags</span><div class="flex flex-wrap gap-1.5">{data.tags.map((tag) => <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#706d65] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>)}</div></div>
-          {data.source ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#5a5750]">Source</span><a href={data.source.startsWith('http') ? data.source : `https://${data.source}`} class="font-mono text-[12px] text-[#ebe6dd]/70 hover:text-[#ebe6dd] transition-colors break-all">{data.source}</a></div> : null}
-          {data.paper ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#5a5750]">Paper</span><span class="font-mono text-[12px] text-[#ebe6dd]/70">{data.paper}</span></div> : null}
+          <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Date</span><div class="font-sans text-[13px] text-[#ebe6dd]/80">{fmtDate(data.date)}</div></div>
+          {data.updated ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Updated</span><div class="font-sans text-[13px] text-[#ebe6dd]/80">{fmtDate(data.updated)}</div></div> : null}
+          <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Status</span><div class="font-sans text-[13px] text-[#ebe6dd]/80">{data.status}</div></div>
+          <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Stack</span><ul class="flex flex-col gap-1 font-mono text-[12px] text-[#ebe6dd]/70">{data.stack.map((s) => <li>{s}</li>)}</ul></div>
+          <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Tags</span><div class="flex flex-wrap gap-1.5">{data.tags.map((tag) => <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[#9a958c] border border-white/[0.08] px-2.5 py-0.5">{tag}</span>)}</div></div>
+          {data.source ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Source</span><a href={data.source.startsWith('http') ? data.source : `https://${data.source}`} class="font-mono text-[12px] text-[#ebe6dd]/70 hover:text-[#ebe6dd] transition-colors break-all">{data.source}</a></div> : null}
+          {data.paper ? <div class="flex flex-col gap-1.5"><span class="font-mono text-[9px] uppercase tracking-[0.3em] text-[#7a766e]">Paper</span><span class="font-mono text-[12px] text-[#ebe6dd]/70">{data.paper}</span></div> : null}
         </div>
       </aside>
 
@@ -40,7 +40,7 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
               <tbody>
                 {data.results.map((result) => (
                   <tr class="border-b border-white/[0.05] last:border-b-0">
-                    <th class="text-left font-normal py-3 px-4 text-[#706d65] uppercase text-[10px] tracking-[0.18em] w-1/2">{result.label}</th>
+                    <th class="text-left font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em] w-1/2">{result.label}</th>
                     <td class="py-3 px-4 text-[#ebe6dd]/85 text-right">{result.value}</td>
                   </tr>
                 ))}
@@ -60,10 +60,10 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
               <table class="w-full font-mono text-[13px]" style="font-variant-numeric: tabular-nums;">
                 <thead>
                   <tr class="border-b border-white/[0.08]">
-                    <th class="text-left font-normal py-3 px-4 text-[#706d65] uppercase text-[10px] tracking-[0.18em]">Stage</th>
-                    <th class="text-right font-normal py-3 px-4 text-[#706d65] uppercase text-[10px] tracking-[0.18em]">Frequency</th>
-                    <th class="text-right font-normal py-3 px-4 text-[#706d65] uppercase text-[10px] tracking-[0.18em]">Slack</th>
-                    <th class="text-right font-normal py-3 px-4 text-[#706d65] uppercase text-[10px] tracking-[0.18em]">Area</th>
+                    <th class="text-left font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Stage</th>
+                    <th class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Frequency</th>
+                    <th class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Slack</th>
+                    <th class="text-right font-normal py-3 px-4 text-[#9a958c] uppercase text-[10px] tracking-[0.18em]">Area</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -82,8 +82,8 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
         )}
 
         <div class="pt-8 border-t border-white/[0.08] flex items-center justify-between">
-          <a href="/projects" class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#706d65] hover:text-[#ebe6dd] transition-colors">← Index</a>
-          <a href="/contact" class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#706d65] hover:text-[#ebe6dd] transition-colors">Discuss this project →</a>
+          <a href="/projects" class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#9a958c] hover:text-[#ebe6dd] transition-colors">← All Projects</a>
+          <a href="/contact" class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#9a958c] hover:text-[#ebe6dd] transition-colors">Get in touch →</a>
         </div>
       </article>
     </div>
@@ -182,7 +182,7 @@ const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
     text-align: left;
     font-weight: 500;
     padding: 0.75rem 0.9rem;
-    color: #706d65;
+    color: #9a958c;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     font-size: 10px;

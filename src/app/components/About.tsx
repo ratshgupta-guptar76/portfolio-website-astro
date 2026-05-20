@@ -32,7 +32,7 @@ export function About() {
 
             {/* Caption overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6">
-              <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#706d65]">
+              <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#9a958c]">
                 Fig. 01 — Cover image
               </span>
             </div>
@@ -79,7 +79,7 @@ export function About() {
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
                   {d.label}
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#706d65]">
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#9a958c]">
                   {d.detail}
                 </span>
               </div>

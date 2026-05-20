@@ -33,11 +33,11 @@ export function Blog() {
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-[#706d65] uppercase">
+                  <span className="font-mono text-[10px] tracking-[0.2em] text-[#9a958c] uppercase">
                     {post.venue}
                   </span>
                   <span className="text-white/10">·</span>
-                  <span className="font-mono text-[10px] tracking-[0.15em] text-[#706d65] uppercase">
+                  <span className="font-mono text-[10px] tracking-[0.15em] text-[#9a958c] uppercase">
                     {post.date}
                   </span>
                 </div>
@@ -50,7 +50,7 @@ export function Blog() {
               <div className="shrink-0 mt-6">
                 <ArrowUpRight
                   size={16}
-                  className="text-[#706d65] opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0"
+                  className="text-[#9a958c] opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0"
                 />
               </div>
             </a>
