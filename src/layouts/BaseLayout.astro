@@ -115,9 +115,13 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://ratishgupta.com').toS
     </style>
   </head>
   <body class="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary">
+    {/* Preloader markup — text nodes intentionally empty so the static HTML
+        doesn't leak "000" / "Initializing" into crawlers and OG scrapers.
+        The inline script below populates them just before the preloader is
+        revealed; users see no flash. */}
     <div id="site-preloader" aria-hidden="true">
-      <span class="label">Initializing</span>
-      <div class="count">000</div>
+      <span class="label"></span>
+      <div class="count"></div>
       <div class="track"><div class="fill"></div></div>
     </div>
 
@@ -127,8 +131,13 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://ratishgupta.com').toS
 
         var el = document.getElementById("site-preloader");
         if (!el) return;
+        var labelEl = el.querySelector(".label");
         var countEl = el.querySelector(".count");
         var fillEl = el.querySelector(".fill");
+
+        // Populate visible text just before showing the preloader.
+        labelEl.textContent = "Initializing";
+        countEl.textContent = "000";
 
         document.documentElement.classList.add("preloading");
         el.classList.add("active");
