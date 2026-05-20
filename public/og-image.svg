@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#08080a"/>
+
+  <!-- Subtle architectural grid -->
+  <g opacity="0.06" stroke="#ebe6dd" stroke-width="0.5">
+    <line x1="0" y1="158" x2="1200" y2="158"/>
+    <line x1="0" y1="472" x2="1200" y2="472"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+  </g>
+
+  <!-- Soft radial warmth -->
+  <defs>
+    <radialGradient id="warmth" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#b08d57" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#b08d57" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#warmth)"/>
+
+  <!-- Boxed R logo, top-left -->
+  <rect x="80" y="80" width="56" height="56" fill="none" stroke="#ebe6dd" stroke-width="1.5"/>
+  <text x="108" y="120" font-family="'Cormorant Garamond', Georgia, 'Times New Roman', serif" font-size="34" font-weight="500" fill="#ebe6dd" text-anchor="middle">R</text>
+
+  <!-- Site mark, top-left mono -->
+  <text x="156" y="116" font-family="'Space Mono', 'Courier New', monospace" font-size="14" letter-spacing="3.5" fill="#9a958c">RATISHGUPTA.COM</text>
+
+  <!-- Gold accent rule -->
+  <rect x="80" y="240" width="48" height="2" fill="#b08d57"/>
+
+  <!-- Kicker -->
+  <text x="80" y="282" font-family="'Space Mono', 'Courier New', monospace" font-size="16" letter-spacing="5" fill="#9a958c">RTL DESIGN  ·  HARDWARE VERIFICATION</text>
+
+  <!-- Title -->
+  <text x="80" y="392" font-family="'Cormorant Garamond', Georgia, 'Times New Roman', serif" font-size="92" font-weight="500" fill="#ebe6dd" letter-spacing="-2">Ratish Gupta</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="450" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="26" font-weight="400" fill="#a8a39a">RTL design and verification on FPGA, heading toward</text>
+  <text x="80" y="486" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="26" font-weight="400" fill="#a8a39a">graduate research in ML-accelerator microarchitecture.</text>
+
+  <!-- Bottom mono row -->
+  <text x="80" y="568" font-family="'Space Mono', 'Courier New', monospace" font-size="14" letter-spacing="3.5" fill="#7a766e">COMP. ENG.  ·  McMASTER UNIVERSITY  ·  2023 — 2027</text>
+
+  <!-- Decorative diamond, top-right -->
+  <rect x="1075" y="100" width="14" height="14" fill="none" stroke="#ebe6dd" stroke-width="1" transform="rotate(45 1082 107)" opacity="0.4"/>
+
+  <!-- Decorative dot cluster, bottom-right -->
+  <g fill="#ebe6dd" opacity="0.3">
+    <circle cx="1080" cy="560" r="2"/>
+    <circle cx="1095" cy="560" r="2"/>
+    <circle cx="1110" cy="560" r="2"/>
+  </g>
+</svg>
