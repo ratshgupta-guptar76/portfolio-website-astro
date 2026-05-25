@@ -16,6 +16,23 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://ratishgupta.com').toS
 <!doctype html>
 <html lang="en" class="dark">
   <head>
+    {/* Google tag (gtag.js) — Google Analytics 4. Placed first inside <head>
+        so the loader script starts fetching before any other resources, per
+        Google's installation guidance. Uses `is:inline` so Astro ships the
+        snippet verbatim instead of bundling it. */}
+    <script
+      is:inline
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-H882B0KTCV"
+    ></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-H882B0KTCV');
+    </script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
@@ -177,19 +194,5 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://ratishgupta.com').toS
       <slot />
     </main>
     <Footer />
-
-    {/* Google tag (gtag.js) — Google Analytics 4. Loaded at end of <body>
-        instead of <head> so it doesn't block first paint / LCP. */}
-    <script
-      is:inline
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-H882B0KTCV"
-    ></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-H882B0KTCV');
-    </script>
   </body>
 </html>

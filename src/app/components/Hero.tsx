@@ -261,7 +261,7 @@ export function Hero() {
       >
         {/* Cosmic background image */}
         <img
-          src="https://images.unsplash.com/photo-1767188789485-54e0922d76a8?crop=entropy&cs=tinysrgb&fit=max&fm=webp&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY29zbW9zJTIwZGVlcCUyMHNwYWNlJTIwc3RhcnMlMjBuZWJ1bGF8ZW58MXx8fHwxNzcyOTA3MTE4fDA&ixlib=rb-4.1.0&q=70&w=1280"
+          src="https://images.unsplash.com/photo-1767188789485-54e0922d76a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY29zbW9zJTIwZGVlcCUyMHNwYWNlJTIwc3RhcnMlMjBuZWJ1bGF8ZW58MXx8fHwxNzcyOTA3MTE4fDA&ixlib=rb-4.1.0&q=80&w=1920"
           alt=""
           className="w-full h-[130%] object-cover opacity-[0.12]"
         />
@@ -292,14 +292,14 @@ export function Hero() {
       {/* === LAYER 3: Floating panels (midground objects) === */}
       <FloatingPanel
         className="top-[14%] left-[4%] w-[140px] h-[200px] z-[5]"
-        imgSrc="https://images.unsplash.com/photo-1652724933904-37f1fc1170ad?crop=entropy&cs=tinysrgb&fit=max&fm=webp&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaWxpY29uJTIwd2FmZXIlMjBtYWNybyUyMHNlbWljb25kdWN0b3IlMjBkYXJrfGVufDF8fHx8MTc3MjkwNzExOHww&ixlib=rb-4.1.0&q=80&w=400"
+        imgSrc="https://images.unsplash.com/photo-1652724933904-37f1fc1170ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaWxpY29uJTIwd2FmZXIlMjBtYWNybyUyMHNlbWljb25kdWN0b3IlMjBkYXJrfGVufDF8fHx8MTc3MjkwNzExOHww&ixlib=rb-4.1.0&q=80&w=400"
         label="Silicon"
         delay={1.4}
         parallaxY={panelLeftY}
       />
       <FloatingPanel
         className="bottom-[12%] right-[3%] w-[160px] h-[220px] z-[5]"
-        imgSrc="https://images.unsplash.com/photo-1649182784901-48f5f2d40ecc?crop=entropy&cs=tinysrgb&fit=max&fm=webp&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMGFyY2hpdGVjdHVyZSUyMGRhcmslMjBtaW5pbWFsfGVufDF8fHx8MTc3MjkwNzExOXww&ixlib=rb-4.1.0&q=80&w=400"
+        imgSrc="https://images.unsplash.com/photo-1649182784901-48f5f2d40ecc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMGFyY2hpdGVjdHVyZSUyMGRhcmslMjBtaW5pbWFsfGVufDF8fHx8MTc3MjkwNzExOXww&ixlib=rb-4.1.0&q=80&w=400"
         label="Structure"
         delay={1.6}
         parallaxY={panelRightY}
@@ -307,7 +307,7 @@ export function Hero() {
       {/* Third smaller panel — top right, adds asymmetric balance */}
       <FloatingPanel
         className="top-[22%] right-[12%] w-[100px] h-[130px] z-[5]"
-        imgSrc="https://images.unsplash.com/photo-1767188789485-54e0922d76a8?crop=entropy&cs=tinysrgb&fit=max&fm=webp&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY29zbW9zJTIwZGVlcCUyMHNwYWNlJTIwc3RhcnMlMjBuZWJ1bGF8ZW58MXx8fHwxNzcyOTA3MTE4fDA&ixlib=rb-4.1.0&q=80&w=400"
+        imgSrc="https://images.unsplash.com/photo-1767188789485-54e0922d76a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY29zbW9zJTIwZGVlcCUyMHNwYWNlJTIwc3RhcnMlMjBuZWJ1bGF8ZW58MXx8fHwxNzcyOTA3MTE4fDA&ixlib=rb-4.1.0&q=80&w=400"
         label="Depth"
         delay={2.0}
         parallaxY={panelTopY}
