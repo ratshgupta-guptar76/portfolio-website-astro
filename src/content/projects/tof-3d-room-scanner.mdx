@@ -28,9 +28,9 @@ results:
   - { label: Visualisation,        value: "Open3D LineSet — circumferential + vertical edges" }
 ---
 
-The 2DX3 capstone project at McMaster — a tabletop room scanner built around a TI Tiva C (TM4C1294NCPDT) microcontroller. A stepper motor rotates a ST VL53L1X time-of-flight ranging sensor through a full 360° plane while the firmware samples 128 distances per revolution, ships them over UART as comma-separated text, and a Python host program assembles the planes into a 3D point cloud rendered with [Open3D](https://www.open3d.org/).
+The 2DX3 capstone project at McMaster. A tabletop room scanner built around a TI Tiva C (TM4C1294NCPDT) microcontroller. A stepper motor rotates a ST VL53L1X time-of-flight ranging sensor through a full 360° plane while the firmware samples 128 distances per revolution, ships them over UART as comma-separated text, and a Python host program assembles the planes into a 3D point cloud rendered with [Open3D](https://www.open3d.org/).
 
-It's the project that ties together every lab from the course — GPIO control, finite-state machines, ADC sampling, PWM, I²C, UART, and interrupt-driven control — into one coherent embedded system.
+It's the project where every lab from the course (GPIO control, finite-state machines, ADC sampling, PWM, I²C, UART, interrupt-driven control) finally has to coexist on one board.
 
 ## System overview
 
@@ -87,9 +87,9 @@ The VL53L1X is a 940 nm ST time-of-flight ranging sensor that reports millimetre
 - `PG0` → XSHUT (sensor reset)
 - I²C address `0x29`
 
-The driver is the ST-supplied `VL53L1X_api.c`, which exposes a polled-mode "start ranging → wait for data ready → read range" cycle. Each ranging takes a few tens of milliseconds, well within the 640 µs × 4 = 2.56 ms inter-sample stepper budget — the limiting factor on scan speed isn't the motor, it's the sensor's integration time.
+The driver is the ST-supplied `VL53L1X_api.c`, which exposes a polled-mode "start ranging → wait for data ready → read range" cycle. Each ranging takes a few tens of milliseconds, well within the 640 µs × 4 = 2.56 ms inter-sample stepper budget. The limiting factor on scan speed isn't the motor, it's the sensor's integration time.
 
-Initial bring-up was the usual I²C scavenger hunt: SDA stuck low because the open-drain bit on `GPIO_PORTB_ODR_R` wasn't set (the line tried to drive high actively and the pull-up couldn't recover the falling edge); a pull-up on the wrong rail; an XSHUT line floating at boot that left the sensor in an undefined state until `PG0` was explicitly initialised.
+Initial bring-up was the usual I²C scavenger hunt. SDA stuck low because the open-drain bit on `GPIO_PORTB_ODR_R` wasn't set (the line tried to drive high actively, and the pull-up couldn't recover the falling edge). A pull-up on the wrong rail. An XSHUT line floating at boot that left the sensor in an undefined state until `PG0` was explicitly initialised.
 
 ## Scan loop and UART telemetry
 
@@ -117,11 +117,11 @@ def toXYZ(measurements):
     return points
 ```
 
-The 270° offset in the angle calculation is the only piece that wasn't obvious from first principles — it lines the sensor's mounted zero with the visualization frame's `+y` axis. Without it the scan came out rotated and reflected, which looked exactly like a real room geometry that just happened to be wrong, which is the worst kind of bug.
+The 270° offset in the angle calculation is the only piece that wasn't obvious from first principles. It lines the sensor's mounted zero up with the visualization frame's `+y` axis. Without it the scan came out rotated and reflected, which looked exactly like a real room geometry that just happened to be wrong. That's the worst kind of bug.
 
 ## Visualisation in Open3D
 
-Once the points are in `(x, y, z)`, Open3D handles the rest. The output is a `LineSet`, not a raw point cloud — within each frame the 128 points are connected in a closed loop (i.e. each scan plane is rendered as an octagon-ish polygon outlining the room slice at that height), and corresponding points across adjacent frames are connected vertically. The result looks like a wireframe contour map of the scanned space.
+Once the points are in `(x, y, z)`, Open3D handles the rest. The output is a `LineSet`, not a raw point cloud. Within each frame, the 128 points are connected in a closed loop, so each scan plane renders as an octagon-ish polygon outlining the room slice at that height. Corresponding points across adjacent frames are connected vertically. The result looks like a wireframe contour map of the scanned space.
 
 ```python
 # Within-plane edges: close each scan into a polygon
@@ -146,4 +146,4 @@ for frame in range(num_frames - 1):
 
 ## What it taught me
 
-This was the project where I stopped thinking of MCU peripherals as separate units and started thinking about them as one bus-shared resource that you have to schedule. The motor wants the µs scale, the ToF wants the ms scale, the UART wants the serial scale, and they all share the same clock and the same processor. Making them cooperate without dropping samples or stalling the motor is what embedded engineering actually is.
+This was the project where I stopped thinking of MCU peripherals as separate units and started thinking of them as one bus-shared resource you have to schedule. The motor wants the µs scale. The ToF wants the ms scale. The UART wants the serial scale. They all share the same clock and the same processor, and getting them to cooperate without dropping samples or stalling the motor is the thing that turns out to actually be embedded engineering.
